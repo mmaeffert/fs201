@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "557669744446",
+    "project_id": "fs201-f4013",
+    "storage_bucket": "fs201-f4013.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:557669744446:android:323660b76a369b1d03b66f",
+        "android_client_info": {
+          "package_name": "com.example.broetchenservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "557669744446-ogk9lfp7gummj4r7ljdplq9bkn2p5hnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVPvVlb2UvjwutHNziBcV2z-hsQxAo_Dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "557669744446-ogk9lfp7gummj4r7ljdplq9bkn2p5hnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
