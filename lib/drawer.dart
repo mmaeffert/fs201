@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './main.dart';
 import './dauerauftrag.dart';
 import './account.dart';
+import './realTimeDatabaseExample.dart';
 
 class drawer {
   test(BuildContext context) {
@@ -51,6 +52,18 @@ class drawer {
                 Navigator.pop(context);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Account()));
+              },
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              title: Text(
+                "Database Beispiel",
+                style: TextStyle(fontSize: 25),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RTDatabase()));
               },
             ),
           ],

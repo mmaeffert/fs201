@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "557669744446",
+    "firebase_url": "https://fs201-f4013-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "fs201-f4013",
     "storage_bucket": "fs201-f4013.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "557669744446-r70ukffchbcl1soj027it97t6nnpnh96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.broetchenservice",
+            "certificate_hash": "72c6050d9c44979403fe99ef7af9aaa7c6129f6a"
+          }
+        },
         {
           "client_id": "557669744446-ogk9lfp7gummj4r7ljdplq9bkn2p5hnt.apps.googleusercontent.com",
           "client_type": 3

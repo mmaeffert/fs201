@@ -32,3 +32,30 @@ var profilbild = user.photoURL;
 * Frontend entwickeln
 * Firebase Datenbank aufsetzen
 * Datenbankschema erstellen
+
+## Realtime Database 
+
+### Code Beispiel
+
+```Dart
+  final database = FirebaseDatabase.instance.ref();
+
+Widget build(BuildContext context) {
+    final dailySpecial = database.child('/produkte/');
+    ...
+    dailySpecial
+        .set({'normalesBroetchen': 0.3})
+        .then((value) => print("Erfolgreich geschrieben")) //Wird ausgeführt nachdem geschrieben wurde, sonst nicht
+        .catchError((onError) => print(onError));
+```
+
+[Gutes Video für Realtime Database](https://www.youtube.com/watch?v=sXBJZD0fBa4&t)
+
+### Regeln
+
+Queries werden am Anfang und Ende mit "/" geschrieben:
+
+~database.child('produkte');~
+**database.child('/produkte/');**
+
+Beides funktioniert, lasst uns trotzdem auf eins einiges
