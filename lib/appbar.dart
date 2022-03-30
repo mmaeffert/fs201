@@ -26,10 +26,14 @@ class Appbar {
   }
 
   static showUserProfile() {
-    return CircleAvatar(
-      radius: 21,
-      backgroundImage: NetworkImage(GetCurrentUser().getUser().photoURL),
-    );
+    if (GetCurrentUser().getUser() == null) {
+      return SizedBox.shrink();
+    } else {
+      return CircleAvatar(
+        radius: 21,
+        backgroundImage: NetworkImage(GetCurrentUser().getUser().photoURL),
+      );
+    }
   }
 
   static test(BuildContext context) {

@@ -45,9 +45,27 @@ class _AccountState extends State<Account> {
                 return SizedBox.shrink();
               }
             },
-          )
+          ),
+          renderLogOutButton(context),
         ],
       )),
     );
+  }
+
+  renderLogOutButton(BuildContext context) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return ElevatedButton.icon(
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+            if (this.mounted) {
+              setState(() {});
+            }
+          },
+          icon: Icon(Icons.logout),
+          label: Text("Log out"));
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }

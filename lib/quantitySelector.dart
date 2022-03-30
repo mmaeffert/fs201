@@ -18,7 +18,9 @@ class _QuantitySelectorState extends State<QuantitySelector> {
   }
 
   incrementCounter() {
-    counter++;
+    if (counter < 99) {
+      counter++;
+    }
     setState(() {});
   }
 
@@ -32,16 +34,23 @@ class _QuantitySelectorState extends State<QuantitySelector> {
         child: Row(
       children: [
         IconButton(
+          alignment: Alignment.centerLeft,
           onPressed: decrementCounter,
           icon: Icon(Icons.arrow_left),
           color: Colors.yellowAccent,
           splashRadius: 14,
         ),
-        Center(
-          child: Text(counter.toString()),
-          widthFactor: 5,
+        Container(
+          child: Center(
+            child: Text(
+              counter.toString(),
+            ),
+            widthFactor: 5,
+          ),
+          constraints: BoxConstraints(maxWidth: 20),
         ),
         IconButton(
+          alignment: Alignment.centerRight,
           onPressed: incrementCounter,
           icon: Icon(Icons.arrow_right),
           color: Colors.yellowAccent,

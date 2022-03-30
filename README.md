@@ -1,16 +1,34 @@
 # broetchenservice
 
-A new Flutter project.
+Eine App mit der Schüler Brötchen bestellen können
 
-## Getting Started
+## Developer Guideline
 
-This project is a starting point for a Flutter application.
+Es gibt eigentlich nur wenig Regeln. Commitet lieber wenig, dafür oft, anstatt selten und viel. So sparen wir uns Merge Konflikte. Außerdem wäre es gut, wenn wir nicht an der selben Datei arbeiten, Absprachen wären dafür gut.
 
-A few resources to get you started if this is your first Flutter project:
+## Firebase
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Der Benutzer kann sich über Google durch Firebase anmelden. Siehe dazu ```googleSignInProvider.dart``` Klasse. Wenn ihr die Daten des Nutzer haben wollt, könnt ihr das wie folgt:
+``` Dart
+import 'package:firebase_auth/firebase_auth.dart';
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+...
+var user = FirebaseAuth.instance.currentUser;
+var profilbild = user.photoURL;  
+
+```
+
+## Geplante Features
+ 
+* Account balance wird oben in der AppBar angezeigt
+* Der Benutzer kann Daueraufträge einrichten und beenden
+* Alle Bestellungen des Nutzers werden angezeigt
+* Nutzer kann Theme in Einstellungen wechseln
+* Zahlungslink zu meinem PayPal
+* Admin hat eigene Schaltfläche, wo er beispielsweise Guthaben aufladen kann
+
+## Was noch getan werden muss
+
+* Frontend entwickeln
+* Firebase Datenbank aufsetzen
+* Datenbankschema erstellen
