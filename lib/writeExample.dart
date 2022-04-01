@@ -21,7 +21,7 @@ class _WriteExampleState extends State<WriteExample> {
         ElevatedButton(
             onPressed: () {
               dailySpecial
-                  .set({'normalesBroetchen': 0.3})
+                  .set({'normalesBroetchen': 0.8})
                   .then((value) => print("Erfolgreich geschrieben"))
                   .catchError((onError) => print(onError));
             },

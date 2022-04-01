@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './themes.dart';
@@ -9,7 +12,22 @@ import './googleSignInProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
+
+  if(kIsWeb){
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: "AIzaSyBCCcWHUfnVD6dMAm_hNv6_yAWMoO5XkRY",
+        appId: "1:557669744446:web:5508584d8e59b60f03b66f",
+        messagingSenderId: "557669744446",
+        projectId: "fs201-f4013",
+
+      ),
+    );
+  }
+  else if(Platform.isAndroid){
+    await Firebase.initializeApp();
+  }
 
   runApp(const MyAPp());
 }

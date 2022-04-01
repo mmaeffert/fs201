@@ -2,6 +2,11 @@
 
 Eine App mit der Schüler Brötchen bestellen können
 
+
+##WEB STARTEN
+flutter run -d chrome --web-port=5000
+Firebase hat nur ausgewählte Ports für Web. Da diese bei jedem Start sich ändern im Debug Mode müssen wir den Port 5000 nutzen.
+
 ## Developer Guideline
 
 Es gibt eigentlich nur wenig Regeln. Commitet lieber wenig, dafür oft, anstatt selten und viel. So sparen wir uns Merge Konflikte. Außerdem wäre es gut, wenn wir nicht an der selben Datei arbeiten, Absprachen wären dafür gut.
