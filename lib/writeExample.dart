@@ -1,3 +1,6 @@
+import 'package:broetchenservice/order/singleOrder.dart';
+import 'package:broetchenservice/order/wholeOrder.dart';
+import 'package:broetchenservice/writeToDB.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +24,32 @@ class _WriteExampleState extends State<WriteExample> {
         ElevatedButton(
             onPressed: () {
               dailySpecial
-                  .set({'normalesBroetchen': 0.3})
+                  .set({'koernerbroetchen': 2.5})
                   .then((value) => print("Erfolgreich geschrieben"))
                   .catchError((onError) => print(onError));
             },
-            child: Text("Setze Brötchen"))
+            child: Text("Setze Brötchen")),
+        ElevatedButton(
+            onPressed: () {
+              writeOrder();
+            },
+            child: Text("Speicher Bestellung"))
       ]),
     ));
+  }
+
+  writeOrder() {
+    List<SingleOrder> sol = [
+      new SingleOrder("normalesbroetchen", 3, 0.3),
+      new SingleOrder("kornerbroetchen", 1, 0.8)
+    ];
+    // sol.forEach((element) {
+    //   print(element.identifier);
+    // });
+    WholeOrder wo = new WholeOrder(sol);
+    // wo.orderList.forEach(((element) {
+    //   print(element.identifier);
+    // }));
+    writeToDB().writeOrder(wo);
   }
 }

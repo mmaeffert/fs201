@@ -32,6 +32,8 @@ var profilbild = user.photoURL;
 * Frontend entwickeln
 * Firebase Datenbank aufsetzen
 * Datenbankschema erstellen
+* Bestellung wird in Bestellung-tabelle geschrieben, aber noch nicht in user_order (Hilfstabelle). Dafür müssen Bestellungen aber erstmal indiziert werden (Aufsteigende Bestellnummer bekommen)
+* Front end Bestellungen mit Backend Bestellungen verbinden
 
 ## Realtime Database 
 
@@ -59,3 +61,23 @@ Queries werden am Anfang und Ende mit "/" geschrieben:
 **database.child('/produkte/');**
 
 Beides funktioniert, lasst uns trotzdem auf eins einiges
+
+## Bestellungen abspeichern
+
+Um Bestellungen abzuspeichern werden zwei Klassen verwendet. ```SingleOrder``` und ```WholeOrder```. ```WholeOrder``` muss eine Liste aus  ```SingleOrder``` übergeben werden. Die ```WholeOrder``` wird dann in ```WriteToDB.writeOrder``` übergeben.^
+
+```Dart
+    //Create SingleOrder List
+    List<SingleOrder> sol = [
+      new SingleOrder("normalesbroetchen", 3, 0.3),
+      new SingleOrder("kornerbroetchen", 1, 0.8)
+    ];
+
+    //Create WholeOrder Object which sets userID and Value
+    WholeOrder wo = new WholeOrder(sol);
+
+    //Write Whole Order to DB
+    writeToDB().writeOrder(wo);
+```
+
+![Klassendiagramm Bestellung](/db_model_writeorder.png?raw=true "Klassendiagramm Bestellung")
