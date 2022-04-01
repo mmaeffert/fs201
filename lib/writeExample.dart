@@ -39,17 +39,16 @@ class _WriteExampleState extends State<WriteExample> {
   }
 
   writeOrder() {
+    //Create SingleOrder List
     List<SingleOrder> sol = [
       new SingleOrder("normalesbroetchen", 3, 0.3),
       new SingleOrder("kornerbroetchen", 1, 0.8)
     ];
-    // sol.forEach((element) {
-    //   print(element.identifier);
-    // });
+
+    //Create WholeOrder Object which sets userID and Value
     WholeOrder wo = new WholeOrder(sol);
-    // wo.orderList.forEach(((element) {
-    //   print(element.identifier);
-    // }));
+
+    //Write Whole Order to DB
     writeToDB().writeOrder(wo);
   }
 }
