@@ -86,3 +86,12 @@ Um Bestellungen abzuspeichern werden zwei Klassen verwendet. ```SingleOrder``` u
 ```
 
 ![Klassendiagramm Bestellung](/db_model_writeorder.png?raw=true "Klassendiagramm Bestellung")
+
+## Datenbank Vorgänge
+
+-> ```writeOrder()```
+* bestellung wird erstellt
+* Eintrag in user_order (Hilfstabelle) wird gemacht
+* ```changeUserBalance()``` wird ausgeführt
+* -> Balance Änderung wird in balance Tabelle gespeichert
+* -> User Balance wird angepasst

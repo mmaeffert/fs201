@@ -34,7 +34,12 @@ class _WriteExampleState extends State<WriteExample> {
             onPressed: () {
               writeOrder();
             },
-            child: Text("Speicher Bestellung"))
+            child: Text("Speicher Bestellung")),
+        ElevatedButton(
+            onPressed: () {
+              writeToDB().changeUserBalance(10, "Guthaben aufgelade", "");
+            },
+            child: Text("Change balance")),
       ]),
     ));
   }
