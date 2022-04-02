@@ -3,6 +3,7 @@ import './main.dart';
 import './dauerauftrag.dart';
 import './account.dart';
 import './realTimeDatabaseExample.dart';
+import 'order/UI/purchaseOrder.dart';
 
 class drawer {
   test(BuildContext context) {
@@ -18,7 +19,10 @@ class drawer {
               ),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.push(context,
+    MaterialPageRoute(builder: (context) => PurchaseOrder()));
               },
+
             ),
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),

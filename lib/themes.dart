@@ -17,7 +17,10 @@ class CustomTheme with ChangeNotifier {
         primaryColor: Color.fromARGB(255, 189, 171, 113),
         backgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
-        textTheme: TextTheme(bodyText1: TextStyle(color: Colors.black)));
+        textTheme: TextTheme(
+            bodyText1: TextStyle(color: Colors.black)
+
+        ));
   }
 
   static ThemeData get darkTheme {

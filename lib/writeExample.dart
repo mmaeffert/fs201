@@ -1,3 +1,4 @@
+import 'package:broetchenservice/order/product.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:broetchenservice/writeToDB.dart';
@@ -41,9 +42,13 @@ class _WriteExampleState extends State<WriteExample> {
   writeOrder() {
     //Create SingleOrder List
     List<SingleOrder> sol = [
-      new SingleOrder("normalesbroetchen", 3, 0.3),
-      new SingleOrder("milchbroetchen", 1, 0.8),
-      new SingleOrder("coffee", 1, 2)
+      new SingleOrder(
+          3,
+          Product(
+            0.3,
+            "Kaiser Brötchen",
+          )),
+      new SingleOrder(1, Product(0.8, "Körner Brötchen")),
     ];
 
     //Create WholeOrder Object which sets userID and Value
