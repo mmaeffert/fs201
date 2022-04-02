@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Flutter",
             "flutterMode": "debug",
-            "args": ["-d", "chrome","--web-port", "5000"]
+            //"args": ["-d", "chrome","--web-port", "5000"]
         }
     ]
 }
