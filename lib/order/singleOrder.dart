@@ -6,10 +6,13 @@
 * price: 0.3
 */
 
-class SingleOrder {
-  String identifier;
-  int amount;
-  double price;
+import 'package:broetchenservice/order/product.dart';
 
-  SingleOrder(this.identifier, this.amount, this.price);
+class SingleOrder extends Product{
+  bool standingOrder=false;
+  String status = "o"; // o - open ; c - canceled ; p - processed
+  int amount;
+
+
+  SingleOrder(this.amount, Product product) : super(product.price, product.identifier);
 }

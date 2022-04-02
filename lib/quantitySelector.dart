@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 
-class QuantitySelector extends StatefulWidget {
-  const QuantitySelector({Key? key}) : super(key: key);
+class QuantitySelector extends StatefulWidget with ChangeNotifier{
+   QuantitySelector({Key? key}) : super(key: key);
 
+ int _counter = 1;
+  int getQuantity() {
+    return _counter;
+  }
   @override
   State<QuantitySelector> createState() => _QuantitySelectorState();
 }
 
 class _QuantitySelectorState extends State<QuantitySelector> {
-  var counter = 1;
+
 
   decrementCounter() {
-    if (counter > 0) {
-      counter--;
+    if ( widget._counter > 1) {
+      widget._counter--;
+      widget.notifyListeners();
       setState(() {});
     }
   }
 
   incrementCounter() {
-    if (counter < 99) {
-      counter++;
+    if ( widget._counter < 99) {
+      widget._counter++;
+      widget.notifyListeners();
     }
     setState(() {});
-  }
-
-  getQuantity() {
-    return counter;
   }
 
   @override
@@ -43,7 +45,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
         Container(
           child: Center(
             child: Text(
-              counter.toString(),
+              widget._counter.toString(),
             ),
             widthFactor: 5,
           ),

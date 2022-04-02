@@ -17,11 +17,14 @@ void main() async {
   if(kIsWeb){
     await Firebase.initializeApp(
       options: FirebaseOptions(
-        apiKey: "AIzaSyBCCcWHUfnVD6dMAm_hNv6_yAWMoO5XkRY",
-        appId: "1:557669744446:web:5508584d8e59b60f03b66f",
-        messagingSenderId: "557669744446",
-        projectId: "fs201-f4013",
-
+          apiKey: "AIzaSyBCCcWHUfnVD6dMAm_hNv6_yAWMoO5XkRY",
+          authDomain: "fs201-f4013.firebaseapp.com",
+          databaseURL: "https://fs201-f4013-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "fs201-f4013",
+          storageBucket: "fs201-f4013.appspot.com",
+          messagingSenderId: "557669744446",
+          appId: "1:557669744446:web:5508584d8e59b60f03b66f",
+          measurementId: "G-ZPY0F32Z07",
       ),
     );
   }

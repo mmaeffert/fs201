@@ -4,7 +4,6 @@ import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class WholeOrder {
-  String status = "o"; // o - open ; c - canceled ; p - processed
   double wholeOrderValue = 0; //Value of all SingleOrders
   String userID = ""; //Unique User ID fetched from Google account data
   late List<SingleOrder> orderList;
