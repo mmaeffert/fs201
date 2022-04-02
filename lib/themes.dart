@@ -26,6 +26,7 @@ class CustomTheme with ChangeNotifier {
   static ThemeData get darkTheme {
     return ThemeData(
         fontFamily: 'Poppins',
+
         primaryColor: Color.fromARGB(255, 112, 112, 112),
         backgroundColor: Color.fromARGB(255, 32, 32, 32),
         scaffoldBackgroundColor: Color.fromARGB(255, 32, 32, 32),
