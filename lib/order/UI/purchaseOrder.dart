@@ -1,5 +1,6 @@
 import 'package:broetchenservice/UI%20Kit/checkBoxKit.dart';
 import 'package:broetchenservice/UI%20Kit/headerKit.dart';
+import 'package:broetchenservice/themes.dart';
 import 'package:flutter/material.dart';
 import '../../UI Kit/textKit.dart';
 import '../../quantitySelector.dart';
@@ -22,26 +23,15 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
   List<Product> salableProducts = []; //this are our Products what we sale
 
 
-
-
-
-  late DropDownProducts dropDownProducts;
   @override
   void initState() {
+    currentTheme.addListener(() { setState(() {});});
     widget.quantitySelector.addListener(calculatePrice);
     //TODO: GET ProducList from DB
     salableProducts.add(Product(0.3, "Kaisersemmel"));
     salableProducts.add(Product(0.3, "Körnerbrötchen"));
     salableProducts.add(Product(0.3, "Kürbiskernbrötchen"));
     widget.chosenProduct = salableProducts.first;
-
-    //DropDownListener for chosenProduct
-    dropDownProducts =DropDownProducts(widget.chosenProduct,salableProducts);
-    dropDownProducts.addListener(() {
-      setState(() {
-        widget.chosenProduct = dropDownProducts.chosenProduct;
-      });
-    });
     super.initState();
   }
 
@@ -72,7 +62,11 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
 
                 Container(
                   margin: EdgeInsets.only(bottom: 20),
-                  child: dropDownProducts,
+                  child: Product.DropDownProducts(widget.chosenProduct,salableProducts, (value){
+                    setState(() {
+                      widget.chosenProduct = value!;
+                    });
+                  }),
                 ),
                 Row(
                   children: [

@@ -20,43 +20,20 @@ class Product {
   }
 
 
-}
-
-
-class DropDownProducts extends StatefulWidget with ChangeNotifier{
-  DropDownProducts(this.chosenProduct, this.salableProducts);
-  List<Product> salableProducts;
-  Product chosenProduct;
-
-  @override
-  State<DropDownProducts> createState() => _DropDownProductsState();
-}
-
-class _DropDownProductsState extends State<DropDownProducts> {
-
-  @override
-  void initState() {
-    currentTheme.addListener(() {
-      setState(() {});});
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-      return Row(
-        children: [
-          Container(
-              margin: EdgeInsets.only(right: 8),
-              child: const Text(
-                "Brötchensorte: ",
-                style: TextStyle(fontSize: 16),
-              )),
-          DropdownButton<Product>(
+ static DropDownProducts(Product chosenProduct,List<Product> salableProducts, ValueChanged onChanged){
+    return Row(
+      children: [
+        Container(
+            margin: EdgeInsets.only(right: 8),
+            child: const Text(
+              "Brötchensorte: ",
+              style: TextStyle(fontSize: 16),
+            )),
+        DropdownButton<Product>(
             dropdownColor: CustomTheme.isDarkTheme
                 ? CustomTheme.darkTheme.backgroundColor
                 : CustomTheme.lightTheme.backgroundColor,
-            items: widget.salableProducts.map((Product product) {
+            items: salableProducts.map((Product product) {
               return DropdownMenuItem<Product>(
                 value: product,
                 child: Container(
@@ -94,17 +71,14 @@ class _DropDownProductsState extends State<DropDownProducts> {
                 ),
               );
             }).toList(),
-            value: widget.chosenProduct,
+            value: chosenProduct,
             style: TextStyle(fontSize: 16),
-            onChanged: (value){
-              setState(() {
-                widget.chosenProduct = value!;
-                widget.notifyListeners();
-              });
-            }
-          ),
-        ],
-      );
+            onChanged: onChanged,
+        ),
+      ],
+    );
 
   }
+
 }
+
