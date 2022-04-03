@@ -3,6 +3,7 @@ import 'package:broetchenservice/UI%20Kit/textKit.dart';
 import 'package:broetchenservice/order/UI/purchaseOrder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../UI Kit/headerKit.dart';
 import '../singleOrder.dart';
 import 'package:broetchenservice/appbar.dart' as ab;
@@ -108,7 +109,8 @@ class _OrdersTableState extends State<OrdersTable> {
                                               width:
                                                   displayWidthforTable * 0.26,
                                               child: Text(
-                                               TextKit.textwithEuro(order.price),
+                                                TextKit.textwithEuro(
+                                                    order.price),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
@@ -121,8 +123,8 @@ class _OrdersTableState extends State<OrdersTable> {
                                               width:
                                                   displayWidthforTable * 0.26,
                                               child: Text(
-                                                TextKit.textwithEuro(order.price *
-                                                        order.amount),
+                                                TextKit.textwithEuro(
+                                                    order.price * order.amount),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),

@@ -10,7 +10,7 @@ class writeToDB {
 
   //Writes an Order to DB
   writeOrder(WholeOrder order) {
-    final orderNode = database.child('/bestellungen/').push();
+    final orderNode = database.child('/orders/').push();
 
     final orderID = orderNode.key;
 
@@ -25,6 +25,7 @@ class writeToDB {
       });
     });
 
+    //Creates wholeorder Object as JSON
     var query = <String, dynamic>{
       'uid': order.userID,
       'value': order.wholeOrderValue,
@@ -32,11 +33,13 @@ class writeToDB {
       'composition': orderListJson
     };
 
+    //writes into "orders" table
     orderNode
         .set(query)
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
 
+    //Writes into assist table user_order, which saves the orders a certain user did
     database
         .child('/user_order/' + user!.uid)
         .update({orderID!: 1})
@@ -44,14 +47,17 @@ class writeToDB {
         .catchError((onError) => print(onError));
     ;
 
+    //calculates the value of the whole order
     double orderValue = 0;
     order.orderList.forEach((singleOrder) {
       orderValue += singleOrder.amount * singleOrder.price;
     });
 
+    //makes entry in "balance" table
     changeUserBalance(orderValue * (-1), "from order", orderID);
   }
 
+  //Updates user data
   updateUser() {
     final userEntry = database.child('/users/' + user!.uid);
 
@@ -66,13 +72,15 @@ class writeToDB {
         .catchError((onError) => print(onError));
   }
 
+  //Changes user balance positively or negatively
+  //Leave comment as "" if you do not want to leave a comment
+  //Leave order ID as "" if you do not want to leace an order id
   changeUserBalance(double balance, String comment, String orderID) {
-    print("BALANCE: " + balance.toString());
-
     if (balance == 0) {
       throw new Exception("Balance must be positive");
     }
 
+    //Creates reference to balance table
     final balanceTable = database.child('/balance/' + user!.uid);
 
     var query = <String, dynamic>{
