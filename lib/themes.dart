@@ -17,9 +17,8 @@ class CustomTheme with ChangeNotifier {
         primaryColor: Color.fromARGB(255, 189, 171, 113),
         backgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
             bodyText1: TextStyle(color: Colors.black)
-
         ));
   }
 
