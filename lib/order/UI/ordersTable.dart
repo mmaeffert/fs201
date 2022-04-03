@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../../db/readFromDB.dart';
 import '../../themes.dart';
 import '../product.dart';
 import '../singleOrder.dart';
@@ -16,7 +16,6 @@ class OrdersTable extends StatefulWidget {
 }
 
 class _OrdersTableState extends State<OrdersTable> {
-
   @override
   void initState() {
     super.initState();
@@ -32,19 +31,18 @@ class _OrdersTableState extends State<OrdersTable> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    final Tablenbreite = MediaQuery.of(context).size.width-340;
+    final Tablenbreite = MediaQuery.of(context).size.width - 340;
     return SingleChildScrollView(
       child: Container(
         child: Column(
-
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 0, left: 0),
-              child: Divider(color: CustomTheme.isDarkTheme
-                  ?Colors.white24: Colors.black26),
+              child: Divider(
+                  color: CustomTheme.isDarkTheme
+                      ? Colors.white24
+                      : Colors.black26),
             ),
             Container(
               margin: EdgeInsets.only(top: 0, bottom: 0, left: 10),
@@ -54,8 +52,9 @@ class _OrdersTableState extends State<OrdersTable> {
                     fontWeight: FontWeight.bold,
                   )),
             ),
-            Divider(color: CustomTheme.isDarkTheme
-                ?Colors.white24: Colors.black26),
+            Divider(
+                color:
+                    CustomTheme.isDarkTheme ? Colors.white24 : Colors.black26),
             Container(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -72,19 +71,39 @@ class _OrdersTableState extends State<OrdersTable> {
                           label: Text('Brötchen'),
                         ),
                         DataColumn(
-                          label: Expanded(child: Text('Menge', textAlign: TextAlign.center,)),
+                          label: Expanded(
+                              child: Text(
+                            'Menge',
+                            textAlign: TextAlign.center,
+                          )),
                         ),
                         DataColumn(
-                          label: Expanded(child: Text('Preis', textAlign: TextAlign.center,)),
+                          label: Expanded(
+                              child: Text(
+                            'Preis',
+                            textAlign: TextAlign.center,
+                          )),
                         ),
                         DataColumn(
-                          label: Expanded(child: Text('Summe',textAlign: TextAlign.center,)),
+                          label: Expanded(
+                              child: Text(
+                            'Summe',
+                            textAlign: TextAlign.center,
+                          )),
                         ),
                         DataColumn(
-                          label: Expanded(child: Text('Dauerauftrag', textAlign: TextAlign.center,)),
+                          label: Expanded(
+                              child: Text(
+                            'Dauerauftrag',
+                            textAlign: TextAlign.center,
+                          )),
                         ),
                         DataColumn(
-                          label: Expanded(child: Text('Löschen', textAlign: TextAlign.center,)),
+                          label: Expanded(
+                              child: Text(
+                            'Löschen',
+                            textAlign: TextAlign.center,
+                          )),
                         ),
                         // Lets add one more column to show a delete button
                       ],
@@ -96,7 +115,8 @@ class _OrdersTableState extends State<OrdersTable> {
                                 cells: [
                                   DataCell(
                                     Container(
-                                      constraints: BoxConstraints(minWidth: 130),
+                                      constraints:
+                                          BoxConstraints(minWidth: 130),
                                       width: Tablenbreite * 0.45, //SET width
                                       child: Text(
                                         order.identifier,
@@ -108,7 +128,8 @@ class _OrdersTableState extends State<OrdersTable> {
                                     SizedBox(
                                       width: 60, //SET width
                                       child: Text(
-                                        order.amount.toString(), textAlign:TextAlign.center,
+                                        order.amount.toString(),
+                                        textAlign: TextAlign.center,
                                       ),
                                     ),
                                     onTap: () {},
@@ -117,9 +138,11 @@ class _OrdersTableState extends State<OrdersTable> {
                                     Container(
                                       constraints: BoxConstraints(minWidth: 70),
                                       width: Tablenbreite * 0.25,
-                                      child: Text(NumberFormat.currency(
-                                          locale: 'eu')
-                                          .format(order.price), textAlign:TextAlign.center,),
+                                      child: Text(
+                                        NumberFormat.currency(locale: 'eu')
+                                            .format(order.price),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                     onTap: () {},
                                   ),
@@ -127,34 +150,34 @@ class _OrdersTableState extends State<OrdersTable> {
                                     Container(
                                       constraints: BoxConstraints(minWidth: 70),
                                       width: Tablenbreite * 0.25,
-                                      child: Text(NumberFormat.currency(
-                                              locale: 'eu')
-                                          .format(order.price * order.amount), textAlign:TextAlign.center,),
+                                      child: Text(
+                                        NumberFormat.currency(locale: 'eu')
+                                            .format(order.price * order.amount),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                     onTap: () {},
                                   ),
                                   DataCell(
-                                      Align(
-
-                                        alignment: Alignment.center,
-                                        child:
-                                        SizedBox(
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: SizedBox(
                                         width: 60,
                                         child: Checkbox(
                                           value: order.standingOrder,
                                           onChanged: (bool? value) {
                                             setState(() {
-                                             // order.standingOrder = value!;
+                                              // order.standingOrder = value!;
                                             });
                                           },
-                                        ),),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   DataCell(
                                     Container(
                                         width: 50,
                                         child: Align(
-
                                           alignment: Alignment.center,
                                           child: IconButton(
                                               onPressed: () {
@@ -162,8 +185,9 @@ class _OrdersTableState extends State<OrdersTable> {
                                                   widget.orders.remove(order);
                                                 });
                                               },
-                                              icon: const Icon(Icons.delete,
-                                              color: Colors.red,
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
                                               )),
                                         )),
                                   ),
@@ -173,18 +197,16 @@ class _OrdersTableState extends State<OrdersTable> {
                     )),
               ),
             ),
-
             Container(
               alignment: Alignment.centerRight,
               margin: EdgeInsets.only(top: 20, bottom: 20, right: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                  });
+                  setState(() {});
                 },
                 child: Text(
                   "Kostenpflichtig bestellen",
-                 // style: TextStyle(fontSize: 15),
+                  // style: TextStyle(fontSize: 15),
                 ),
               ),
             ),

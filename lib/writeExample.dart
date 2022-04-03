@@ -1,7 +1,7 @@
 import 'package:broetchenservice/order/product.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
-import 'package:broetchenservice/writeToDB.dart';
+import 'package:broetchenservice/db/writeToDB.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
