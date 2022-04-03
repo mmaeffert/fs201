@@ -4,8 +4,8 @@ import './themes.dart';
 
 class GetCurrentUser {
   var user = FirebaseAuth.instance.currentUser;
-  getUser() {
-    return user;
+  User? getUser() {
+      return user;
   }
 }
 
@@ -30,7 +30,7 @@ class Appbar {
     } else {
       return CircleAvatar(
         radius: 21,
-        backgroundImage: NetworkImage(GetCurrentUser().getUser().photoURL),
+        backgroundImage: NetworkImage(GetCurrentUser().getUser()!.photoURL.toString()),
       );
     }
   }
