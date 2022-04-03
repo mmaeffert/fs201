@@ -4,6 +4,7 @@ import './account.dart';
 import './realTimeDatabaseExample.dart';
 import 'appbar.dart';
 import 'order/UI/ordersTable.dart';
+import 'themes.dart';
 
 
 class drawer {
@@ -30,10 +31,9 @@ class drawer {
               accountName: Text("Gast"),
               accountEmail: Text("gast@gmail.com"),
               currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? Colors.blue
-                    : Colors.white,
+                backgroundColor: CustomTheme.isDarkTheme
+                    ?CustomTheme.darkTheme.backgroundColor.withOpacity(0.8):
+                CustomTheme.lightTheme.backgroundColor.withOpacity(0.8),
                 child: Text("G",
                   style: TextStyle(fontSize: 40.0),
                 ),
