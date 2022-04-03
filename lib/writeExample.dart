@@ -48,12 +48,12 @@ class _WriteExampleState extends State<WriteExample> {
     //Create SingleOrder List
     List<SingleOrder> sol = [
       new SingleOrder(
-          3,
+          3, false,
           Product(
             0.3,
             "Kaiser Brötchen",
           )),
-      new SingleOrder(1, Product(0.8, "Körner Brötchen")),
+      new SingleOrder(1, false,Product(0.8, "Körner Brötchen")),
     ];
 
     //Create WholeOrder Object which sets userID and Value

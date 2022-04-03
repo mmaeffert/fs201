@@ -7,6 +7,7 @@
 */
 
 import 'package:broetchenservice/order/product.dart';
+import 'package:flutter/material.dart';
 
 class SingleOrder extends Product{
   bool standingOrder=false;
@@ -14,5 +15,30 @@ class SingleOrder extends Product{
   int amount;
 
 
-  SingleOrder(this.amount, Product product) : super(product.price, product.identifier);
+  SingleOrder(this.amount, this.standingOrder, Product product) : super(product.price, product.identifier);
+
+
+static List<DataColumn> DataTableColumnsGerman=
+  const [
+    DataColumn(
+      label: Text('Brötchen'),
+    ),
+    DataColumn(
+      label: Expanded(child: Text('Menge', textAlign: TextAlign.center,)),
+    ),
+    DataColumn(
+      label: Expanded(child: Text('Preis', textAlign: TextAlign.center,)),
+    ),
+    DataColumn(
+      label: Expanded(child: Text('Summe',textAlign: TextAlign.center,)),
+    ),
+    DataColumn(
+      label: Expanded(child: Text('Dauerauftrag', textAlign: TextAlign.center,)),
+    ),
+    DataColumn(
+      label: Expanded(child: Text('Löschen', textAlign: TextAlign.center,)),
+    ),
+];
+
+
 }
