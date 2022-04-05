@@ -6,9 +6,8 @@ import '../../UI Kit/textKit.dart';
 import '../../quantitySelector.dart';
 import '../product.dart';
 
-
 // ignore: must_be_immutable
-class PurchaseOrder extends StatefulWidget with ChangeNotifier{
+class PurchaseOrder extends StatefulWidget with ChangeNotifier {
   PurchaseOrder({Key? key}) : super(key: key);
   QuantitySelector quantitySelector = new QuantitySelector(); //Ui for Amount
   bool _isStandingOrder = false; //Standing order = Dauerauftrag
@@ -22,10 +21,11 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
   //Product from Dropdown
   List<Product> salableProducts = []; //this are our Products what we sale
 
-
   @override
   void initState() {
-    currentTheme.addListener(() { setState(() {});});
+    currentTheme.addListener(() {
+      setState(() {});
+    });
     widget.quantitySelector.addListener(calculatePrice);
     //TODO: GET ProducList from DB
     salableProducts.add(Product(0.3, "Kaisersemmel"));
@@ -41,76 +41,72 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
     return widget.quantitySelector.getQuantity() * widget.chosenProduct.price;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          HeaderKit.header1("Bestellung aufgeben"),
-
-          Container(
-            constraints: BoxConstraints(maxWidth: 420),
-            margin: EdgeInsets.only(left: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: Product.DropDownProducts(widget.chosenProduct,salableProducts, (value){
-                    setState(() {
-                      widget.chosenProduct = value!;
-                    });
-                  }),
-                ),
-                Row(
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: Text(
-                          "Anzahl: ",
-                          style: TextStyle(fontSize: 16),
-                        )),
-                    widget.quantitySelector,
-                  ],
-                ),
-
-                CheckBoxKit.checkbox1(widget.isStandingOrder, "Dauerauftrag", (value) {
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        HeaderKit.header1("Bestellung aufgeben"),
+        Container(
+          constraints: BoxConstraints(maxWidth: 420),
+          margin: EdgeInsets.only(left: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Product.DropDownProducts(
+                    widget.chosenProduct, salableProducts, (value) {
+                  setState(() {
+                    widget.chosenProduct = value!;
+                  });
+                }),
+              ),
+              Row(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(right: 8),
+                      child: Text(
+                        "Anzahl: ",
+                        style: TextStyle(fontSize: 16),
+                      )),
+                  widget.quantitySelector,
+                ],
+              ),
+              CheckBoxKit.checkbox1(
+                widget.isStandingOrder,
+                "Dauerauftrag",
+                (value) {
                   setState(() {
                     widget._isStandingOrder = value!;
                   });
-                },),
-
-
-                Container(
-                  margin: EdgeInsets.only(top: 20, right: 20),
+                },
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20, right: 20),
+                child: Text(
+                  "Summe: " + TextKit.textwithEuro(calculatePrice()),
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(top: 20, bottom: 10, right: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    widget.notifyListeners();
+                  },
                   child: Text(
-                    "Summe: " + TextKit.textwithEuro(calculatePrice()),
-                    style: TextStyle(fontSize: 18),
+                    "Zur Bestellung hinzufügen",
                   ),
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(top: 20, bottom: 10, right: 20),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      widget.notifyListeners();
-                    },
-                    child: Text(
-                      "Zur Bestellung hinzufügen",
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
+      ],
     );
   }
 }

@@ -1,9 +1,9 @@
+import 'package:broetchenservice/orderList.dart';
 import 'package:flutter/material.dart';
 import './dauerauftrag.dart';
 import './account.dart';
 import './realTimeDatabaseExample.dart';
 import 'order/UI/ordersTable.dart';
-
 
 class drawer {
   test(BuildContext context) {
@@ -20,20 +20,19 @@ class drawer {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context,
-    MaterialPageRoute(builder: (context) => OrdersTable()));
+                    MaterialPageRoute(builder: (context) => OrdersTable()));
               },
-
             ),
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "Daueraufträge 📅",
+                "Bestellungen 📅",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Dauerauftrag()));
+                    MaterialPageRoute(builder: (context) => OrderList()));
               },
             ),
             ListTile(

@@ -1,3 +1,4 @@
+import 'package:broetchenservice/db/readFromDB.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -9,7 +10,7 @@ class writeToDB {
   final user = FirebaseAuth.instance.currentUser;
 
   //Writes an Order to DB
-  writeOrder(WholeOrder order) {
+  writeOrder(WholeOrder order) async {
     final orderNode = database.child('/orders/').push();
 
     final orderID = orderNode.key;
@@ -30,7 +31,8 @@ class writeToDB {
       'uid': order.userID,
       'value': order.wholeOrderValue,
       'time': {".sv": "timestamp"},
-      'composition': orderListJson
+      'composition': orderListJson,
+      'timestamp': order.timeStamp
     };
 
     //writes into "orders" table
@@ -42,9 +44,11 @@ class writeToDB {
     //Writes into assist table user_order, which saves the orders a certain user did
     database
         .child('/user_order/' + user!.uid)
-        .update({orderID!: 1})
+        .push()
+        .set(orderID)
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
+
     ;
 
     //calculates the value of the whole order
@@ -54,7 +58,15 @@ class writeToDB {
     });
 
     //makes entry in "balance" table
-    changeUserBalance(orderValue * (-1), "from order", orderID);
+    changeUserBalance(orderValue * (-1), "from order", orderID!);
+
+    //Adjust user balance
+    var currentBalance = await ReadFromDB().getUserBalance();
+    currentBalance = (currentBalance == null) ? 0.0 : currentBalance.toDouble();
+    print('Current balance: ' + currentBalance.toString());
+    database
+        .child('/users/' + user!.uid)
+        .update({'balance': currentBalance + orderValue * (-1)});
   }
 
   //Updates user data

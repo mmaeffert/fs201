@@ -1,3 +1,4 @@
+import 'package:broetchenservice/db/readFromDB.dart';
 import 'package:flutter/material.dart';
 
 class ReadExample extends StatefulWidget {
@@ -12,7 +13,18 @@ class _ReadExampleState extends State<ReadExample> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Column(children: []),
+      child: Column(children: [
+        ElevatedButton(
+            onPressed: () {
+              ReadFromDB().getOrderList();
+            },
+            child: Text("getOrderList")),
+        ElevatedButton(
+            onPressed: () {
+              ReadFromDB().getOrderList();
+            },
+            child: Text("getWholeOrderList")),
+      ]),
     ));
   }
 }
