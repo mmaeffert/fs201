@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import './dauerauftrag.dart';
 import './account.dart';
 import './realTimeDatabaseExample.dart';
+import 'appbar.dart';
 import 'order/UI/ordersTable.dart';
+import 'themes.dart';
 
 class drawer {
   test(BuildContext context) {
@@ -11,6 +13,32 @@ class drawer {
         backgroundColor: Theme.of(context).backgroundColor,
         child: ListView(
           children: [
+            GetCurrentUser().getUser() != null? UserAccountsDrawerHeader(
+              accountName: Text(GetCurrentUser().getUser()!.displayName.toString()),
+              accountEmail: Text(GetCurrentUser().getUser()!.email.toString()),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(GetCurrentUser().getUser()!.photoURL.toString()),
+                   backgroundColor:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? Colors.blue
+                    : Colors.white,
+                child: NetworkImage(GetCurrentUser().getUser()!.photoURL.toString())==null?Text(
+                  GetCurrentUser().getUser()!.displayName!.substring(0,1),
+                  style: TextStyle(fontSize: 40.0),
+                ):Container(),
+              ),
+            ):UserAccountsDrawerHeader(
+              accountName: Text("Gast"),
+              accountEmail: Text("gast@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: CustomTheme.isDarkTheme
+                    ?CustomTheme.darkTheme.backgroundColor.withOpacity(0.8):
+                CustomTheme.lightTheme.backgroundColor.withOpacity(0.8),
+                child: Text("G",
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(

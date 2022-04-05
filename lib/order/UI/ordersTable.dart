@@ -44,7 +44,8 @@ class _OrdersTableState extends State<OrdersTable> {
     final displayWidthforTable = MediaQuery.of(context).size.width - 340;
     return Scaffold(
       appBar: ab.Appbar.MainAppBar(context),
-      body: SingleChildScrollView(
+      body:Scrollbar(
+      child: SingleChildScrollView(
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,10 +63,12 @@ class _OrdersTableState extends State<OrdersTable> {
                         "Es sind keine Einträge vorhanden!",
                         style: TextStyle(fontSize: 14),
                       )))
-                  : Container(
+                  : Scrollbar(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        child: SingleChildScrollView(
+                        child:
+    Scrollbar(
+    child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
                               headingRowHeight: 40,
@@ -169,7 +172,7 @@ class _OrdersTableState extends State<OrdersTable> {
                             )),
                       ),
                     ),
-
+              ),
               Container(
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.only(top: 20, bottom: 20, right: 20),
@@ -186,6 +189,7 @@ class _OrdersTableState extends State<OrdersTable> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
