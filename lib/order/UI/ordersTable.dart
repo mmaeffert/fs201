@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:broetchenservice/UI%20Kit/textKit.dart';
+import 'package:broetchenservice/db/writeToDB.dart';
 import 'package:broetchenservice/order/UI/purchaseOrder.dart';
+import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -44,152 +46,160 @@ class _OrdersTableState extends State<OrdersTable> {
     final displayWidthforTable = MediaQuery.of(context).size.width - 340;
     return Scaffold(
       appBar: ab.Appbar.MainAppBar(context),
-      body:Scrollbar(
-      child: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //to Add Purchase to List orders
-              purchaseOrder,
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //to Add Purchase to List orders
+                purchaseOrder,
 
-              HeaderKit.header1("Bestellübersicht"),
+                HeaderKit.header1("Bestellübersicht"),
 
-              orders.isEmpty
-                  ? Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: Center(
-                          child: Text(
-                        "Es sind keine Einträge vorhanden!",
-                        style: TextStyle(fontSize: 14),
-                      )))
-                  : Scrollbar(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child:
-    Scrollbar(
-    child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              headingRowHeight: 40,
-                              columnSpacing: 20,
-                              dataRowHeight: 35,
-                              onSelectAll: (b) {},
-                              horizontalMargin: 8,
-                              columns: SingleOrder.DataTableColumnsGerman,
-                              rows: orders
-                                  .map(
-                                    (order) => DataRow(
+                orders.isEmpty
+                    ? Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Center(
+                            child: Text(
+                          "Es sind keine Einträge vorhanden!",
+                          style: TextStyle(fontSize: 14),
+                        )))
+                    : Scrollbar(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  headingRowHeight: 40,
+                                  columnSpacing: 20,
+                                  dataRowHeight: 35,
+                                  onSelectAll: (b) {},
+                                  horizontalMargin: 8,
+                                  columns: SingleOrder.DataTableColumnsGerman,
+                                  rows: orders
+                                      .map(
+                                        (order) => DataRow(
 
-                                        //selected: true,
-                                        cells: [
-                                          DataCell(
-                                            Container(
-                                              constraints: const BoxConstraints(
-                                                  minWidth: 160),
-                                              width: displayWidthforTable *
-                                                  0.48, //SET width
-                                              child: Text(
-                                                order.identifier,
-                                              ),
-                                            ),
-                                            onTap: () {},
-                                          ),
-                                          DataCell(
-                                            SizedBox(
-                                              width: 55, //SET width
-                                              child: Text(
-                                                order.amount.toString(),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            onTap: () {},
-                                          ),
-                                          DataCell(
-                                            Container(
-                                              constraints: const BoxConstraints(
-                                                  minWidth: 70),
-                                              width:
-                                                  displayWidthforTable * 0.26,
-                                              child: Text(
-                                                TextKit.textwithEuro(
-                                                    order.price),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            onTap: () {},
-                                          ),
-                                          DataCell(
-                                            Container(
-                                              constraints: const BoxConstraints(
-                                                  minWidth: 70),
-                                              width:
-                                                  displayWidthforTable * 0.26,
-                                              child: Text(
-                                                TextKit.textwithEuro(
-                                                    order.price * order.amount),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            onTap: () {},
-                                          ),
-                                          DataCell(
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: SizedBox(
-                                                width: 70,
-                                                child: Checkbox(
-                                                  value: order.standingOrder,
-                                                  onChanged: (bool? value) {
-                                                    setState(() {
-                                                      // order.standingOrder = value!;
-                                                    });
-                                                  },
+                                            //selected: true,
+                                            cells: [
+                                              DataCell(
+                                                Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 160),
+                                                  width: displayWidthforTable *
+                                                      0.48, //SET width
+                                                  child: Text(
+                                                    order.identifier,
+                                                  ),
                                                 ),
+                                                onTap: () {},
                                               ),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Container(
-                                                width: 70,
-                                                child: Align(
+                                              DataCell(
+                                                SizedBox(
+                                                  width: 55, //SET width
+                                                  child: Text(
+                                                    order.amount.toString(),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                onTap: () {},
+                                              ),
+                                              DataCell(
+                                                Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 70),
+                                                  width: displayWidthforTable *
+                                                      0.26,
+                                                  child: Text(
+                                                    TextKit.textwithEuro(
+                                                        order.price),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                onTap: () {},
+                                              ),
+                                              DataCell(
+                                                Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 70),
+                                                  width: displayWidthforTable *
+                                                      0.26,
+                                                  child: Text(
+                                                    TextKit.textwithEuro(
+                                                        order.price *
+                                                            order.amount),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                onTap: () {},
+                                              ),
+                                              DataCell(
+                                                Align(
                                                   alignment: Alignment.center,
-                                                  child: IconButton(
-                                                      onPressed: () {
+                                                  child: SizedBox(
+                                                    width: 70,
+                                                    child: Checkbox(
+                                                      value:
+                                                          order.standingOrder,
+                                                      onChanged: (bool? value) {
                                                         setState(() {
-                                                          orders.remove(order);
+                                                          // order.standingOrder = value!;
                                                         });
                                                       },
-                                                      icon: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red,
-                                                      )),
-                                                )),
-                                          ),
-                                        ]),
-                                  )
-                                  .toList(),
-                            )),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              DataCell(
+                                                Container(
+                                                    width: 70,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: IconButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              orders.remove(
+                                                                  order);
+                                                            });
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.delete,
+                                                            color: Colors.red,
+                                                          )),
+                                                    )),
+                                              ),
+                                            ]),
+                                      )
+                                      .toList(),
+                                )),
+                          ),
+                        ),
                       ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  margin: EdgeInsets.only(top: 20, bottom: 20, right: 20),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        writeToDB().writeOrder(WholeOrder(orders));
+                      });
+                    },
+                    child: const Text(
+                      "Kostenpflichtig bestellen",
+                      // style: TextStyle(fontSize: 15),
                     ),
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.only(top: 20, bottom: 20, right: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {});
-                  },
-                  child: const Text(
-                    "Kostenpflichtig bestellen",
-                    // style: TextStyle(fontSize: 15),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }

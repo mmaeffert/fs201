@@ -8,6 +8,7 @@ class WholeOrder {
   String userID = ""; //Unique User ID fetched from Google account data
   late List<SingleOrder> orderList;
   var timeStamp = 0;
+  bool standingOrder = false;
 
   @override
   toString() {

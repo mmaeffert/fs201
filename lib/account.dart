@@ -1,3 +1,4 @@
+import 'package:broetchenservice/db/readFromDB.dart';
 import 'package:broetchenservice/googleSignInProvider.dart';
 import 'package:broetchenservice/db/writeToDB.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +16,21 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  double userBalance = 0.6;
+
+  @override
+  void initState() {
+    setUserBalance();
+    setState(() {});
+    super.initState();
+  }
+
+  setUserBalance() async {
+    var userBalance = await ReadFromDB().getUserBalance();
+    print(userBalance);
+    this.userBalance = (userBalance == null) ? 0.0 : userBalance.toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +64,17 @@ class _AccountState extends State<Account> {
             },
           ),
           renderLogOutButton(context),
+          Text("Guthaben: " + userBalance.toString()),
+          ElevatedButton.icon(
+              label: Text("Refresh"),
+              onPressed: () {
+                setUserBalance();
+                setState(() {});
+              },
+              icon: FaIcon(
+                FontAwesomeIcons.google,
+                color: Color.fromARGB(255, 150, 133, 131),
+              )),
         ],
       )),
     );

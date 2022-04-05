@@ -36,7 +36,9 @@ class ReadFromDB with ChangeNotifier {
       List<SingleOrder> singleOrderList =
           await getSingleOrdersFromID(ordersMap[key]!);
       print('New SingleOrderList: ' + singleOrderList.toString());
-      wholeOrderList.add(WholeOrder(singleOrderList));
+      wholeOrderList.add(WholeOrder(
+        singleOrderList,
+      ));
     }
 
     for (WholeOrder wo in wholeOrderList) {

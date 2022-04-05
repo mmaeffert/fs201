@@ -19,7 +19,9 @@ class SingleOrder extends Product {
         '\n-Status: ' +
         this.status +
         '\n-StandingOrder: ' +
-        this.standingOrder.toString());
+        this.standingOrder.toString() +
+        '\n-Amount: ' +
+        this.amount.toString());
   }
 
   bool standingOrder = false;
