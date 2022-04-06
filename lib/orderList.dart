@@ -12,7 +12,7 @@ class OrderList extends StatefulWidget {
 
 class _OrderListState extends State<OrderList> {
   List<ListTile> tileList = [];
-
+  bool isloading = true;
   @override
   void initState() {
     tileList.add(ListTile(
@@ -21,7 +21,11 @@ class _OrderListState extends State<OrderList> {
         setState(() {});
       },
     ));
-    getChildrenList();
+    getChildrenList().then((value) {
+      setState(() {
+        isloading = false;
+      });
+    });
     super.initState();
     setState(() {});
   }
@@ -29,11 +33,19 @@ class _OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: ListView(children: tileList)),
+      body: isloading
+          ? Center(
+              child: Column(
+              children: [
+                CircularProgressIndicator(),
+                Text("Loading..."),
+              ],
+            ))
+          : Center(child: ListView(children: tileList)),
     );
   }
 
-  getChildrenList() async {
+  Future<List<WholeOrder>> getChildrenList() async {
     List<WholeOrder> wholeOrderList = await ReadFromDB().getOrderList();
 
     for (WholeOrder wo in wholeOrderList) {
@@ -47,5 +59,7 @@ class _OrderListState extends State<OrderList> {
             )),
       );
     }
+
+    return wholeOrderList;
   }
 }

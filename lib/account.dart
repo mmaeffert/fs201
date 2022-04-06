@@ -20,15 +20,19 @@ class _AccountState extends State<Account> {
 
   @override
   void initState() {
-    setUserBalance();
-    setState(() {});
+    setUserBalance().then((value) {
+      if (value) {
+        setState(() {});
+      }
+    });
     super.initState();
   }
 
-  setUserBalance() async {
+  Future<bool> setUserBalance() async {
     var userBalance = await ReadFromDB().getUserBalance();
     print(userBalance);
     this.userBalance = (userBalance == null) ? 0.0 : userBalance.toDouble();
+    return (userBalance == null) ? false : true;
   }
 
   @override

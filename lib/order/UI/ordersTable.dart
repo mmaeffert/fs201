@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:broetchenservice/UI%20Kit/alertDialogKit.dart';
 import 'package:broetchenservice/UI%20Kit/textKit.dart';
 import 'package:broetchenservice/db/writeToDB.dart';
 import 'package:broetchenservice/order/UI/purchaseOrder.dart';
@@ -187,7 +188,15 @@ class _OrdersTableState extends State<OrdersTable> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        writeToDB().writeOrder(WholeOrder(orders));
+                        writeToDB().writeOrder(WholeOrder(orders)).then((value) => value
+                            ? AlertDialogKit.alertDialog1(
+                                context,
+                                "Ihre Bestellung ist eingegangen.\nThank you for beeing a BrötchenService customer",
+                                "Ok")
+                            : AlertDialogKit.alertDialog1(
+                                context,
+                                "Ihre Bestellung ist fehlgeschlagen\nVermutlich reicht ihr Guthaben nicht aus",
+                                "Ok"));
                       });
                     },
                     child: const Text(

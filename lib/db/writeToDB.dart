@@ -1,8 +1,6 @@
 import 'package:broetchenservice/db/readFromDB.dart';
-import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class writeToDB {
@@ -10,7 +8,17 @@ class writeToDB {
   final user = FirebaseAuth.instance.currentUser;
 
   //Writes an Order to DB
-  writeOrder(WholeOrder order) async {
+  Future<bool> writeOrder(WholeOrder order) async {
+    bool userCanAfford = false;
+    await ReadFromDB()
+        .userCanAfford(order.getOrderValue())
+        .then((value) => userCanAfford = value);
+
+    print('Can he afford?: ' + userCanAfford.toString());
+    if (!userCanAfford) {
+      return false;
+    }
+
     final orderNode = database.child('/orders/').push();
 
     final orderID = orderNode.key;
@@ -49,8 +57,6 @@ class writeToDB {
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
 
-    ;
-
     //calculates the value of the whole order
     double orderValue = 0;
     order.orderList.forEach((singleOrder) {
@@ -67,16 +73,23 @@ class writeToDB {
     database
         .child('/users/' + user!.uid)
         .update({'balance': currentBalance + orderValue * (-1)});
+    return true;
   }
 
   //Updates user data
-  updateUser() {
+  updateUser() async {
     final userEntry = database.child('/users/' + user!.uid);
 
     var query = <String, dynamic>{
       'name': user!.displayName,
       'mail': user!.email,
     };
+
+    await ReadFromDB().userAlreadyExists().then((value) {
+      if (value == false) {
+        query.addAll({'role': 'customer', 'balance': 0.0});
+      }
+    });
 
     userEntry
         .update(query)
@@ -88,10 +101,6 @@ class writeToDB {
   //Leave comment as "" if you do not want to leave a comment
   //Leave order ID as "" if you do not want to leace an order id
   changeUserBalance(double balance, String comment, String orderID) {
-    if (balance == 0) {
-      throw new Exception("Balance must be positive");
-    }
-
     //Creates reference to balance table
     final balanceTable = database.child('/balance/' + user!.uid);
 
