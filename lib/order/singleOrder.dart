@@ -16,19 +16,13 @@ class SingleOrder extends Product {
         this.price.toString() +
         '\n-Identifier: ' +
         this.identifier +
-        '\n-Status: ' +
-        this.status +
-        '\n-StandingOrder: ' +
-        this.standingOrder.toString() +
         '\n-Amount: ' +
         this.amount.toString());
   }
 
-  bool standingOrder = false;
-  String status = "o"; // o - open ; c - canceled ; p - processed
   int amount;
 
-  SingleOrder(this.amount, this.standingOrder, Product product)
+  SingleOrder(this.amount, Product product)
       : super(product.price, product.identifier);
 
   static List<DataColumn> DataTableColumnsGerman = const [

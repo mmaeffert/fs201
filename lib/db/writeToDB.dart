@@ -1,4 +1,5 @@
 import 'package:broetchenservice/db/readFromDB.dart';
+import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,7 @@ class writeToDB {
   final user = FirebaseAuth.instance.currentUser;
 
   //Writes an Order to DB
-  Future<bool> writeOrder(WholeOrder order) async {
+  Future<String> writeOrder(WholeOrder order) async {
     bool userCanAfford = false;
     await ReadFromDB()
         .userCanAfford(order.getOrderValue())
@@ -16,7 +17,16 @@ class writeToDB {
 
     print('Can he afford?: ' + userCanAfford.toString());
     if (!userCanAfford) {
-      return false;
+      return "user cant afford";
+    }
+
+    bool isEmptyOrder = true;
+    int orderAmountSum = 0;
+    for (SingleOrder so in order.orderList) {
+      orderAmountSum += so.amount;
+    }
+    if (order.wholeOrderValue <= 0 || orderAmountSum <= 0) {
+      return "empty order";
     }
 
     final orderNode = database.child('/orders/').push();
@@ -30,7 +40,6 @@ class writeToDB {
         'identifier': singleOrder.identifier,
         'amount': singleOrder.amount,
         'price': singleOrder.price,
-        'status': singleOrder.status
       });
     });
 
@@ -40,7 +49,9 @@ class writeToDB {
       'value': order.wholeOrderValue,
       'time': {".sv": "timestamp"},
       'composition': orderListJson,
-      'timestamp': order.timeStamp
+      'timestamp': order.timeStamp,
+      'status': order.status,
+      'standingOrder': order.standingOrder
     };
 
     //writes into "orders" table
@@ -73,7 +84,7 @@ class writeToDB {
     database
         .child('/users/' + user!.uid)
         .update({'balance': currentBalance + orderValue * (-1)});
-    return true;
+    return "success";
   }
 
   //Updates user data

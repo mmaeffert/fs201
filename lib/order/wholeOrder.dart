@@ -4,11 +4,12 @@ import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class WholeOrder {
+  String status = 'o';
+  bool standingOrder = false;
   double wholeOrderValue = 0; //Value of all SingleOrders
   String userID = ""; //Unique User ID fetched from Google account data
   late List<SingleOrder> orderList;
   var timeStamp = 0;
-  bool standingOrder = false;
 
   @override
   toString() {
@@ -19,6 +20,11 @@ class WholeOrder {
         userID +
         ' Timestamp: ' +
         DateTime.fromMillisecondsSinceEpoch(timeStamp, isUtc: true).toString() +
+        '\n' +
+        ' StandingOrder: ' +
+        standingOrder.toString() +
+        '\n status: ' +
+        status +
         '\n';
     for (SingleOrder so in orderList) {
       result += '---' + so.toString() + '\n';
@@ -26,7 +32,9 @@ class WholeOrder {
     return result;
   }
 
-  WholeOrder(List<SingleOrder> orderList) {
+  WholeOrder(List<SingleOrder> orderList, bool standingOrder, String status) {
+    this.status = status;
+    this.standingOrder = standingOrder;
     //Setting unique user id
     final user = FirebaseAuth.instance.currentUser;
     userID = user!.uid;

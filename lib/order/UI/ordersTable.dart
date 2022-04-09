@@ -37,8 +37,30 @@ class _OrdersTableState extends State<OrdersTable> {
   addSingleOrder() {
     setState(() {
       orders.add(SingleOrder(purchaseOrder.quantitySelector.getQuantity(),
-          purchaseOrder.isStandingOrder, purchaseOrder.chosenProduct));
+          purchaseOrder.chosenProduct));
     });
+  }
+
+  alertBoxFeedback(String value) {
+    switch (value) {
+      case "success":
+        AlertDialogKit.alertDialog1(
+            context,
+            "Ihre Bestellung ist eingegangen.\nThank you for beeing a BrötchenService customer",
+            "Ok");
+        break;
+      case "user cant afford":
+        AlertDialogKit.alertDialog1(
+            context,
+            "Ihre Bestellung ist fehlgeschlagen :(\nEs sieht aus als reicht dein Guthaben nicht aus",
+            "Ok");
+        break;
+      case "empty order":
+        AlertDialogKit.alertDialog1(
+            context, "Du hast keine Brötchen im Warenkorb", "Ok");
+        break;
+      default:
+    }
   }
 
   @override
@@ -145,8 +167,7 @@ class _OrdersTableState extends State<OrdersTable> {
                                                   child: SizedBox(
                                                     width: 70,
                                                     child: Checkbox(
-                                                      value:
-                                                          order.standingOrder,
+                                                      value: true,
                                                       onChanged: (bool? value) {
                                                         setState(() {
                                                           // order.standingOrder = value!;
@@ -188,15 +209,11 @@ class _OrdersTableState extends State<OrdersTable> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        writeToDB().writeOrder(WholeOrder(orders)).then((value) => value
-                            ? AlertDialogKit.alertDialog1(
-                                context,
-                                "Ihre Bestellung ist eingegangen.\nThank you for beeing a BrötchenService customer",
-                                "Ok")
-                            : AlertDialogKit.alertDialog1(
-                                context,
-                                "Ihre Bestellung ist fehlgeschlagen\nVermutlich reicht ihr Guthaben nicht aus",
-                                "Ok"));
+                        writeToDB()
+                            .writeOrder(WholeOrder(orders, true, 'o'))
+                            .then((value) {
+                          alertBoxFeedback(value);
+                        });
                       });
                     },
                     child: const Text(
