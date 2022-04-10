@@ -10,6 +10,7 @@ class writeToDB {
 
   //Writes an Order to DB
   Future<String> writeOrder(WholeOrder order) async {
+    //Checks if user cn afford
     bool userCanAfford = false;
     await ReadFromDB()
         .userCanAfford(order.getOrderValue())
@@ -20,6 +21,7 @@ class writeToDB {
       return "user cant afford";
     }
 
+    //Checks if order is empty
     bool isEmptyOrder = true;
     int orderAmountSum = 0;
     for (SingleOrder so in order.orderList) {
@@ -43,10 +45,12 @@ class writeToDB {
       });
     });
 
+    print("MARIANNNEEEEE: " + order.wholeOrderValue.toStringAsFixed(2));
+
     //Creates wholeorder Object as JSON
     var query = <String, dynamic>{
       'uid': order.userID,
-      'value': order.wholeOrderValue,
+      'value': order.wholeOrderValue.toStringAsFixed(2),
       'time': {".sv": "timestamp"},
       'composition': orderListJson,
       'timestamp': order.timeStamp,

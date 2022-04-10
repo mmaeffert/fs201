@@ -11,6 +11,10 @@ class WholeOrder {
   late List<SingleOrder> orderList;
   var timeStamp = 0;
 
+  getStatus() {
+    return status;
+  }
+
   @override
   toString() {
     String result = "";
