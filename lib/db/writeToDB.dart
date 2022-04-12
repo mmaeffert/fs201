@@ -10,7 +10,7 @@ class writeToDB {
 
   //Writes an Order to DB
   Future<String> writeOrder(WholeOrder order) async {
-    //Checks if user cn afford
+    //Checks if user can afford
     bool userCanAfford = false;
     await ReadFromDB()
         .userCanAfford(order.getOrderValue())
@@ -31,10 +31,19 @@ class writeToDB {
       return "empty order";
     }
 
+    //Checks if user already has an open order
+    if (await ReadFromDB().userAlreadyHasOpenOrder()) {
+      return "has open order";
+    }
+
+    //Checks if user already has open order
+    if (order.standingOrder &&
+        await ReadFromDB().userAlreadyHasStandingOrder()) {
+      return "has standingorder";
+    }
+
     final orderNode = database.child('/orders/').push();
-
     final orderID = orderNode.key;
-
     //Create composition JSON data
     var orderListJson = [];
     order.orderList.forEach((singleOrder) {
@@ -45,8 +54,6 @@ class writeToDB {
       });
     });
 
-    print("MARIANNNEEEEE: " + order.wholeOrderValue.toStringAsFixed(2));
-
     //Creates wholeorder Object as JSON
     var query = <String, dynamic>{
       'uid': order.userID,
@@ -55,7 +62,8 @@ class writeToDB {
       'composition': orderListJson,
       'timestamp': order.timeStamp,
       'status': order.status,
-      'standingOrder': order.standingOrder
+      'standingOrder': order.standingOrder,
+      'orderid': orderID
     };
 
     //writes into "orders" table
@@ -63,6 +71,22 @@ class writeToDB {
         .set(query)
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
+
+    //writes into "open_orders" table
+    database
+        .child('/open_orders/')
+        .set({user!.uid: query})
+        .then((value) => print("Erfolgreich geschrieben"))
+        .catchError((onError) => print(onError));
+
+    //Writes into "standingorders"
+    if (order.standingOrder) {
+      database
+          .child('/standingorders/')
+          .set({user!.uid: query})
+          .then((value) => print("Erfolgreich geschrieben"))
+          .catchError((onError) => print(onError));
+    }
 
     //Writes into assist table user_order, which saves the orders a certain user did
     database
@@ -81,14 +105,17 @@ class writeToDB {
     //makes entry in "balance" table
     changeUserBalance(orderValue * (-1), "from order", orderID!);
 
-    //Adjust user balance
-    var currentBalance = await ReadFromDB().getUserBalance();
-    currentBalance = (currentBalance == null) ? 0.0 : currentBalance.toDouble();
-    print('Current balance: ' + currentBalance.toString());
-    database
-        .child('/users/' + user!.uid)
-        .update({'balance': currentBalance + orderValue * (-1)});
     return "success";
+  }
+
+  //Cancels an order
+  cancelOrder(WholeOrder wo) async {
+    DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
+    ds.ref.remove();
+
+    database.child('/orders/' + wo.orderID!).update({'status': 'c'});
+
+    changeUserBalance(wo.wholeOrderValue, "Caneled order", wo.orderID!);
   }
 
   //Updates user data
@@ -101,7 +128,7 @@ class writeToDB {
     };
 
     await ReadFromDB().userAlreadyExists().then((value) {
-      if (value == false) {
+      if (!value) {
         query.addAll({'role': 'customer', 'balance': 0.0});
       }
     });
@@ -115,7 +142,7 @@ class writeToDB {
   //Changes user balance positively or negatively
   //Leave comment as "" if you do not want to leave a comment
   //Leave order ID as "" if you do not want to leace an order id
-  changeUserBalance(double balance, String comment, String orderID) {
+  changeUserBalance(double balance, String comment, String orderID) async {
     //Creates reference to balance table
     final balanceTable = database.child('/balance/' + user!.uid);
 
@@ -131,5 +158,12 @@ class writeToDB {
         .update(query)
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
+
+    var currentBalance = await ReadFromDB().getUserBalance();
+    currentBalance = (currentBalance == null) ? 0.0 : currentBalance.toDouble();
+    print('Current balance: ' + currentBalance.toString());
+    database
+        .child('/users/' + user!.uid)
+        .update({'balance': currentBalance + balance});
   }
 }

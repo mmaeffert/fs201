@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:collection';
 
 import 'package:broetchenservice/order/product.dart';
@@ -11,6 +13,10 @@ class ReadFromDB with ChangeNotifier {
   final database = FirebaseDatabase.instance.ref();
   final user = FirebaseAuth.instance.currentUser;
 
+  // Als ich anfing diese Funktion zu schreiben, wussten nur Gott und ich wie der Code funktioniert
+  // Jetzt weiß es nur noch Gott
+  // Respekt an jeden der versucht das zu verbessern
+  // Solltest du es schaffen, verewige dich in diesem Kommentar
   getOrderList() async {
     print("hello");
     print(user!.uid);
@@ -46,7 +52,8 @@ class ReadFromDB with ChangeNotifier {
       wholeOrderList.add(WholeOrder(
           singleOrderList,
           wholeOrderProperties['standingOrder'],
-          wholeOrderProperties['status']));
+          wholeOrderProperties['status'],
+          wholeOrderProperties['orderid']));
     }
 
     for (WholeOrder wo in wholeOrderList) {
@@ -96,8 +103,22 @@ class ReadFromDB with ChangeNotifier {
   }
 
   Future<bool> userAlreadyExists() async {
-    DataSnapshot snapshot = await database.child('/user/' + user!.uid).get();
-    return (snapshot.value == null) ? false : true;
+    DataSnapshot snapshot = await database.child('/users/' + user!.uid).get();
+    return snapshot.exists;
+  }
+
+  userAlreadyHasOpenOrder() async {
+    DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
+    print('has open order: ' + ds.exists.toString());
+    return ds.exists;
+  }
+
+  userAlreadyHasStandingOrder() async {
+    DataSnapshot ds =
+        await database.child('/standingorders/' + user!.uid).get();
+    print('has standingOrder: ' + ds.exists.toString());
+
+    return ds.exists;
   }
 
   getSingleOrdersFromID(String orderID) async {
@@ -107,37 +128,15 @@ class ReadFromDB with ChangeNotifier {
         .child('/orders/' + orderID + '/composition/')
         .get()
         .then((composition) {
-      //print('Composition: ' + composition.value.toString());
-
       final data = composition.value as List<dynamic>;
-      //print('data: ' + data.toString());
       data.forEach((key) {
-        // singleOrderList.add(new SingleOrder(
-        //     key['amount'], true, new Product(key['price'], key['identifier'])));
-        // print('PRICE: ' + key['price'].toString());
-        // print('AMOUNT: ' + key['amount'].toString());
-
-        // print('IDENTIFIER: ' + key['identifier']);
-
         final temp = new SingleOrder(
             key['amount'], new Product(key['price'], key['identifier']));
-        //print(temp.toString());
-        //print('before add');
+
         singleOrderList.add(temp);
-        //print(singleOrderList.toString());
-        //print('after add');
       });
-      // data.forEach((key, value) {
-      //   print('Value: ' + value);
-      //   // print('identifier: ' + value['identifier']);
-      //   // singleOrderList.add(new SingleOrder(value['price'], true,
-      //   //     new Product(value['price'], value['identifier'])));
-      // });
     });
-    print('END OF FUNCTION' + singleOrderList.toString());
-    singleOrderList.forEach((element) {
-      //print('in list: ' + element.toString());
-    });
+
     return singleOrderList;
   }
 }
