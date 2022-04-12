@@ -10,6 +10,7 @@ class WholeOrder {
   String userID = ""; //Unique User ID fetched from Google account data
   late List<SingleOrder> orderList;
   var timeStamp = 0;
+  String? orderID = "";
 
   getStatus() {
     return status;
@@ -36,7 +37,9 @@ class WholeOrder {
     return result;
   }
 
-  WholeOrder(List<SingleOrder> orderList, bool standingOrder, String status) {
+  WholeOrder(List<SingleOrder> orderList, bool standingOrder, String status,
+      [String? orderID]) {
+    this.orderID = orderID;
     this.status = status;
     this.standingOrder = standingOrder;
     //Setting unique user id

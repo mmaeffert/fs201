@@ -1,6 +1,7 @@
 import 'dart:collection';
-
+import 'package:flutter/services.dart';
 import 'package:broetchenservice/db/readFromDB.dart';
+import 'package:broetchenservice/db/writeToDB.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/themes.dart';
@@ -72,10 +73,41 @@ class _OrderListState extends State<OrderList> {
             ],
           ),
           children: [
-            Text(
-              wo.standingOrder ? "Aus Dauerauftrag" : "Aus Bestellung",
-              textAlign: TextAlign.left,
-              style: TextStyle(color: Colors.black),
+            Row(
+              children: [
+                Text(
+                  wo.standingOrder ? "Aus Dauerauftrag" : "Aus Bestellung",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: Colors.black),
+                ),
+                (wo.status == 'o')
+                    ? IconButton(
+                        onPressed: (() {
+                          writeToDB().cancelOrder(wo);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                'Bestellung wurde abgebrochen und der Betrag erstattet'),
+                          ));
+                          setState(() {
+                            wo.status = 'c';
+                          });
+                        }),
+                        icon: Icon(Icons.cancel),
+                      )
+                    : SizedBox.shrink()
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Bestellnummer: " + wo.orderID!,
+                  style: TextStyle(color: Colors.black),
+                ),
+                IconButton(
+                    onPressed: () => {copyToClipboard(wo.orderID!)},
+                    icon: Icon(Icons.copy))
+              ],
             ),
             generateOrderList(wo.orderList)
           ],
@@ -86,6 +118,14 @@ class _OrderListState extends State<OrderList> {
     return wholeOrderList;
   }
 
+  copyToClipboard(String orderID) async {
+    await Clipboard.setData(ClipboardData(text: orderID));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Copied to clipboard'),
+    ));
+  }
+
+  //Creates the table that is displayed, when you expand the tile
   generateOrderList(List<SingleOrder> singleOrderList) {
     DataTable result = DataTable(columns: [
       DataColumn(label: Text("Artikel")),
