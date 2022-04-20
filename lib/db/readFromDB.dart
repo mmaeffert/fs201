@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:broetchenservice/balance.dart';
 import 'package:broetchenservice/order/product.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
@@ -57,9 +58,30 @@ class ReadFromDB with ChangeNotifier {
   }
 
   getUserBalance() async {
-    DataSnapshot ds =
-        await database.child('/users/' + user!.uid + '/balance/').get();
-    return ds.value;
+    if (user != null) {
+      DataSnapshot ds =
+          await database.child('/users/' + user!.uid + '/balance/').get();
+      return ds.value;
+    }
+  }
+
+  //Gets BalanceList from Database
+  Future<List<Balance>> getBalanceList() async {
+    DataSnapshot ds = await database.child('/balance/' + user!.uid).get();
+
+    var balanceMap =
+        LinkedHashMap.from(ds.value as LinkedHashMap<int, dynamic>);
+
+    Iterable<int> keySet = balanceMap.keys as Iterable<int>;
+
+    List<Balance> balanceList = [];
+
+    for (int key in keySet) {
+      balanceList.add(Balance(key, balanceMap[key]['balance'],
+          balanceMap[key]['comment'], balanceMap[key]['orderID']));
+    }
+
+    return balanceList;
   }
 
   Future<bool> userCanAfford(double balanceToAdd) async {
