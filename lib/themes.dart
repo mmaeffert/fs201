@@ -5,9 +5,15 @@ CustomTheme currentTheme = CustomTheme();
 class CustomTheme with ChangeNotifier {
   Color primaryDark = Color.fromARGB(255, 112, 112, 112);
   Color primaryBright = Color.fromARGB(255, 189, 171, 113);
+  Color textColorDark = Color.fromARGB(255, 179, 178, 185);
+  Color textColorBright = Colors.black;
 
   getPrimaryColor() {
     return isDarkTheme ? primaryDark : primaryBright;
+  }
+
+  getTextColor() {
+    return isDarkTheme ? textColorBright : textColorBright;
   }
 
   static bool isDarkTheme = true;

@@ -1,3 +1,4 @@
+import 'package:broetchenservice/balancePage.dart';
 import 'package:broetchenservice/orderList.dart';
 import 'package:flutter/material.dart';
 import './dauerauftrag.dart';
@@ -6,6 +7,7 @@ import './realTimeDatabaseExample.dart';
 import 'appbar.dart';
 import 'order/UI/ordersTable.dart';
 import 'themes.dart';
+import './balancePage.dart';
 
 class drawer {
   test(BuildContext context) {
@@ -83,11 +85,13 @@ class drawer {
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "Guthaben 💰",
+                "💰 Guthaben",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BalancePage()));
               },
             ),
             ListTile(

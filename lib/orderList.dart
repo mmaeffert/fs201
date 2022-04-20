@@ -55,14 +55,16 @@ class _OrderListState extends State<OrderList> {
                     width: (MediaQuery.of(context).size.width > 800)
                         ? 800
                         : MediaQuery.of(context).size.width,
-                    child: Card(
-                        color: currentTheme.getPrimaryColor(),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.black)),
-                        child: SingleChildScrollView(
-                            physics: BouncingScrollPhysics(),
-                            child: Column(children: tileList))))),
+                    child: isloading
+                        ? Text("loading...")
+                        : Card(
+                            color: currentTheme.getPrimaryColor(),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: BorderSide(color: Colors.black)),
+                            child: SingleChildScrollView(
+                                physics: BouncingScrollPhysics(),
+                                child: Column(children: tileList))))),
 
             //Standing orders list
             Padding(
@@ -116,6 +118,8 @@ class _OrderListState extends State<OrderList> {
 
   Future<List<WholeOrder>> getChildrenList() async {
     List<WholeOrder> wholeOrderList = await ReadFromDB().getOrderList();
+
+    print('WHOLEORDERLIST: ' + wholeOrderList.toString());
 
     for (WholeOrder wo in wholeOrderList) {
       tileList.add(

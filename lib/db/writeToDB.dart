@@ -154,7 +154,7 @@ class writeToDB {
 
     var query = <String, dynamic>{
       DateTime.now().millisecondsSinceEpoch.toString(): {
-        'balance': balance,
+        'balance': double.parse(balance.toStringAsFixed(2)),
         'comment': (comment == "") ? "no comment" : comment,
         'orderID': (orderID == "") ? "N/A" : orderID
       }

@@ -77,15 +77,19 @@ class ReadFromDB with ChangeNotifier {
     DataSnapshot ds = await database.child('/balance/' + user!.uid).get();
 
     var balanceMap =
-        LinkedHashMap.from(ds.value as LinkedHashMap<int, dynamic>);
+        LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);
 
-    Iterable<int> keySet = balanceMap.keys as Iterable<int>;
+    Iterable<dynamic> keySet = balanceMap.keys as Iterable<dynamic>;
 
     List<Balance> balanceList = [];
 
-    for (int key in keySet) {
-      balanceList.add(Balance(key, balanceMap[key]['balance'],
-          balanceMap[key]['comment'], balanceMap[key]['orderID']));
+    for (String key in keySet) {
+      print(balanceMap[key]['balance']);
+      balanceList.add(Balance(
+          int.parse(key),
+          double.parse(balanceMap[key]['balance'].toString()),
+          balanceMap[key]['comment'],
+          balanceMap[key]['orderID']));
     }
 
     return balanceList;

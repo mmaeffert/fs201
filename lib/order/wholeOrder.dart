@@ -28,6 +28,8 @@ class WholeOrder {
         '\n' +
         ' StandingOrder: ' +
         standingOrder.toString() +
+        '\n OrderID: ' +
+        orderID.toString() +
         '\n status: ' +
         status +
         '\n';
