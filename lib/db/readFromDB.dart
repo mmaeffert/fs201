@@ -138,9 +138,14 @@ class ReadFromDB with ChangeNotifier {
   userAlreadyHasStandingOrder() async {
     DataSnapshot ds =
         await database.child('/standingorders/' + user!.uid).get();
-    print('has standingOrder: ' + ds.exists.toString());
 
     return ds.exists;
+  }
+
+  getStandingOrder() async {
+    DataSnapshot ds =
+        await database.child('/standingorders/' + user!.uid).get();
+    return ds.value;
   }
 
   getSingleOrdersFromID(String orderID) async {
