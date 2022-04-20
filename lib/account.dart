@@ -16,7 +16,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
-  double userBalance = 0.6;
+  double userBalance = 0.0;
 
   @override
   void initState() {
@@ -29,7 +29,9 @@ class _AccountState extends State<Account> {
   }
 
   Future<bool> setUserBalance() async {
-    var userBalance = await ReadFromDB().getUserBalance();
+    if (await ReadFromDB().userAlreadyExists()) {
+      var userBalance = await ReadFromDB().getUserBalance();
+    }
     print(userBalance);
     this.userBalance = (userBalance == null) ? 0.0 : userBalance.toDouble();
     return (userBalance == null) ? false : true;

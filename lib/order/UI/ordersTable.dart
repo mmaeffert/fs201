@@ -59,6 +59,18 @@ class _OrdersTableState extends State<OrdersTable> {
         AlertDialogKit.alertDialog1(
             context, "Du hast keine Brötchen im Warenkorb", "Ok");
         break;
+      case "has open order":
+        AlertDialogKit.alertDialog1(
+            context,
+            "Du hast bereits eine offene Bestellung. Du kannst offene Bestellungen abbrechen und dann neue aufgeben",
+            "Ok");
+        break;
+      case "has standingorder":
+        AlertDialogKit.alertDialog1(
+            context,
+            "Du hast bereits einen aktiven Dauerauftrag. Du kannst ihn in beenden und einen neuen einrichten",
+            "Ok");
+        break;
       default:
     }
   }
