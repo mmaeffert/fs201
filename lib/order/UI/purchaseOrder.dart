@@ -1,5 +1,6 @@
 import 'package:broetchenservice/UI%20Kit/checkBoxKit.dart';
 import 'package:broetchenservice/UI%20Kit/headerKit.dart';
+import 'package:broetchenservice/db/readFromDB.dart';
 import 'package:broetchenservice/themes.dart';
 import 'package:flutter/material.dart';
 import '../../UI Kit/textKit.dart';
@@ -26,6 +27,7 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
     currentTheme.addListener(() {
       setState(() {});
     });
+    loadProducts();
     widget.quantitySelector.addListener(calculatePrice);
     //TODO: GET ProducList from DB
     salableProducts.add(Product(0.3, "Kaisersemmel"));
@@ -33,6 +35,12 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
     salableProducts.add(Product(0.3, "Kürbiskernbrötchen"));
     widget.chosenProduct = salableProducts.first;
     super.initState();
+  }
+
+  loadProducts() async {
+    salableProducts = await ReadFromDB().getProductList();
+    widget.chosenProduct = salableProducts.first;
+    setState(() {});
   }
 
   //sum of an order

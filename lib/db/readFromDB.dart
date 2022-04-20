@@ -95,6 +95,34 @@ class ReadFromDB with ChangeNotifier {
     return balanceList;
   }
 
+  //Gets Produktlist depending on current userrole
+  Future<List<Product>> getProductList() async {
+    List<Product> productList = [];
+    String userRole = await getUserRole();
+    if (userRole == "") {
+      userRole = 'customer';
+    }
+
+    DataSnapshot ds = await database.child('/products/').get();
+
+    LinkedHashMap<Object?, Object?> productMap =
+        LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);
+
+    Iterable<dynamic?> keySet = productMap.keys;
+
+    for (String key in keySet) {
+      LinkedHashMap priceForUser =
+          LinkedHashMap.from(productMap[key] as LinkedHashMap);
+
+      productList
+          .add(Product(double.parse(priceForUser[userRole].toString()), key));
+    }
+
+    print("PRODUCTLIST" + productList.toString());
+
+    return productList;
+  }
+
   Future<bool> userCanAfford(double balanceToAdd) async {
     balanceToAdd *= -1;
     var userBalance = await getUserBalance();
