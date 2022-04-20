@@ -5,7 +5,7 @@ import './themes.dart';
 class GetCurrentUser {
   var user = FirebaseAuth.instance.currentUser;
   User? getUser() {
-      return user;
+    return user;
   }
 }
 
@@ -24,13 +24,36 @@ class Appbar {
     );
   }
 
+  static TabAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text("🍞 Brötchenservice"),
+      bottom: TabBar(tabs: [
+        Tab(
+          text: "Bestellungen",
+        ),
+        Tab(
+          text: "Dauerauftrag",
+        )
+      ]),
+      actions: [
+        showUserProfile(),
+        test(context),
+        IconButton(
+            onPressed: () => {currentTheme.toggleTheme()},
+            icon: Icon(Icons.brush)),
+      ],
+    );
+  }
+
   static showUserProfile() {
     if (GetCurrentUser().getUser() == null) {
       return SizedBox.shrink();
     } else {
       return CircleAvatar(
         radius: 21,
-        backgroundImage: NetworkImage(GetCurrentUser().getUser()!.photoURL.toString()),
+        backgroundImage:
+            NetworkImage(GetCurrentUser().getUser()!.photoURL.toString()),
       );
     }
   }

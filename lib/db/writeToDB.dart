@@ -58,7 +58,6 @@ class writeToDB {
     var query = <String, dynamic>{
       'uid': order.userID,
       'value': order.wholeOrderValue.toStringAsFixed(2),
-      'time': {".sv": "timestamp"},
       'composition': orderListJson,
       'timestamp': order.timeStamp,
       'status': order.status,
@@ -116,6 +115,13 @@ class writeToDB {
     database.child('/orders/' + wo.orderID!).update({'status': 'c'});
 
     changeUserBalance(wo.wholeOrderValue, "Caneled order", wo.orderID!);
+  }
+
+  //Deletes standing Order
+  deleteStandingOrder() async {
+    DataSnapshot ds =
+        await database.child('/standingorders/' + user!.uid).get();
+    ds.ref.remove();
   }
 
   //Updates user data

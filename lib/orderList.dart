@@ -6,6 +6,7 @@ import 'package:broetchenservice/order/wholeOrder.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:broetchenservice/UI%20Kit/alertDialogKit.dart';
 import 'dart:io';
 import './appbar.dart' as ab;
 
@@ -18,12 +19,13 @@ class OrderList extends StatefulWidget {
 
 class _OrderListState extends State<OrderList> {
   Map<String, Icon> statusIcon = {
-    'o': Icon(Icons.timelapse, color: Colors.orangeAccent),
-    'p': Icon(Icons.check, color: Colors.green),
+    'o': Icon(Icons.timelapse_outlined, color: Colors.orangeAccent),
+    'p': Icon(Icons.check_outlined, color: Colors.green),
     'r': Icon(Icons.attach_money_outlined, color: Colors.green),
-    'c': Icon(Icons.cancel, color: Colors.redAccent)
+    'c': Icon(Icons.cancel_outlined, color: Colors.redAccent)
   };
   List<ExpansionTile> tileList = [];
+  List<Widget> standingOrderList = [];
   bool isloading = true;
   @override
   void initState() {
@@ -32,28 +34,82 @@ class _OrderListState extends State<OrderList> {
         isloading = false;
       });
     });
+    getStandingOrderColumn().then((value) => standingOrderList = value);
     super.initState();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: ab.Appbar.MainAppBar(context),
-        body: Padding(
-            padding: EdgeInsets.all(12),
-            child: Container(
-                width: (MediaQuery.of(context).size.width > 800)
-                    ? 800
-                    : MediaQuery.of(context).size.width,
-                child: Card(
-                    color: currentTheme.getPrimaryColor(),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        side: BorderSide(color: Colors.black)),
-                    child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: Column(children: tileList))))));
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: ab.Appbar.TabAppBar(context),
+          body: TabBarView(children: [
+            //Orderslist
+            Padding(
+                padding: EdgeInsets.all(15),
+                child: Container(
+                    width: (MediaQuery.of(context).size.width > 800)
+                        ? 800
+                        : MediaQuery.of(context).size.width,
+                    child: Card(
+                        color: currentTheme.getPrimaryColor(),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.black)),
+                        child: SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
+                            child: Column(children: tileList))))),
+
+            //Standing orders list
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: Card(
+                color: currentTheme.getPrimaryColor(),
+                child: Column(children: standingOrderList),
+              ),
+            )
+          ])),
+    );
+  }
+
+  getStandingOrderColumn() async {
+    List<Widget> returnList = [];
+    var standingOrder = await ReadFromDB().getStandingOrder();
+
+    if (standingOrder == null) {
+      return;
+    }
+
+    returnList.add(Text("Erstellt am: " + getDate(standingOrder['timestamp'])));
+    returnList.add(Text("Einkaufswert: " + standingOrder['value']));
+
+    List<SingleOrder> singleOrders =
+        await ReadFromDB().getSingleOrdersFromID(standingOrder['orderid']);
+
+    for (SingleOrder so in singleOrders) {
+      returnList.add(Row(
+        children: [
+          Text(so.identifier + "  -  "),
+          Text(so.amount.toString() + " Stück für jeweils "),
+          Text(so.price.toString() + " €")
+        ],
+      ));
+    }
+
+    returnList.add(IconButton(
+        onPressed: (() {
+          writeToDB().deleteStandingOrder();
+          AlertDialogKit.alertDialog1(
+              context,
+              "Der Dauerauftrag wurde beendet. Eventuell musst du noch die offene Bestellung löschen",
+              "Ok");
+          setState(() {});
+        }),
+        icon: Icon(Icons.cancel_outlined)));
+
+    return returnList;
   }
 
   Future<List<WholeOrder>> getChildrenList() async {
@@ -89,9 +145,8 @@ class _OrderListState extends State<OrderList> {
                             content: Text(
                                 'Bestellung wurde abgebrochen und der Betrag erstattet'),
                           ));
-                          setState(() {
-                            wo.status = 'c';
-                          });
+                          wo.status = 'c';
+                          setState(() {});
                         }),
                         icon: Icon(Icons.cancel),
                       )
@@ -115,6 +170,7 @@ class _OrderListState extends State<OrderList> {
       );
     }
 
+    wholeOrderList.sort(((a, b) => a.timeStamp - b.timeStamp));
     return wholeOrderList;
   }
 
