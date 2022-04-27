@@ -5,7 +5,7 @@ import './dauerauftrag.dart';
 import './account.dart';
 import './realTimeDatabaseExample.dart';
 import 'appbar.dart';
-import 'order/UI/ordersTable.dart';
+import 'order/UI/order.dart';
 import 'themes.dart';
 import './balancePage.dart';
 
@@ -66,8 +66,8 @@ class drawer {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => OrdersTable()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Order()));
               },
             ),
             ListTile(

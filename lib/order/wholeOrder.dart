@@ -60,6 +60,14 @@ class WholeOrder {
     // }
   }
 
+  updateOrderValue() {
+    wholeOrderValue = 0;
+    for (SingleOrder so in orderList) {
+      wholeOrderValue += so.price * so.amount;
+    }
+    wholeOrderValue = double.parse(wholeOrderValue.toStringAsFixed(2));
+  }
+
   //Calculates whole order value
   getOrderValue() {
     double sum = 0;

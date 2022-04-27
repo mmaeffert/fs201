@@ -5,7 +5,7 @@ CustomTheme currentTheme = CustomTheme();
 class CustomTheme with ChangeNotifier {
   Color primaryDark = Color.fromARGB(255, 112, 112, 112);
   Color primaryBright = Color.fromARGB(255, 189, 171, 113);
-  Color textColorDark = Color.fromARGB(255, 179, 178, 185);
+  Color textColorDark = Color.fromARGB(255, 218, 218, 218);
   Color textColorBright = Colors.black;
 
   getPrimaryColor() {
@@ -13,7 +13,7 @@ class CustomTheme with ChangeNotifier {
   }
 
   getTextColor() {
-    return isDarkTheme ? textColorBright : textColorBright;
+    return isDarkTheme ? textColorDark : textColorBright;
   }
 
   static bool isDarkTheme = true;
@@ -37,6 +37,7 @@ class CustomTheme with ChangeNotifier {
     return ThemeData(
         fontFamily: 'Poppins',
         primaryColor: Color.fromARGB(255, 112, 112, 112),
+        primaryColorLight: Color.fromARGB(255, 183, 183, 183),
         backgroundColor: Color.fromARGB(255, 32, 32, 32),
         scaffoldBackgroundColor: Color.fromARGB(255, 32, 32, 32),
         textTheme: TextTheme(
