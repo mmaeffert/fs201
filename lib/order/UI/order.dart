@@ -30,7 +30,6 @@ class _OrderState extends State<Order> {
       setState(() {
         isloaded = true;
       });
-      print('CRDLIST: ' + cardList.toString());
     });
     wo.orderList = singleOrderList;
     super.initState();
@@ -42,9 +41,12 @@ class _OrderState extends State<Order> {
       appBar: ab.Appbar.MainAppBar(context),
       body: Stack(
         children: [
+          // Cards with Product Information
           Wrap(
             children: !isloaded ? [CircularProgressIndicator()] : cardList,
           ),
+
+          //Shoppingcart
           Expanded(
               child: Align(
                   alignment: FractionalOffset.bottomCenter,
@@ -70,9 +72,13 @@ class _OrderState extends State<Order> {
                             )
                           ],
                         ),
+
+                        //Current items in the shopping cart
                         Column(
                           children: shoppingcartWidgets,
                         ),
+
+                        //Finish order area
                         Container(
                           alignment: AlignmentDirectional.bottomCenter,
                           child: Row(
@@ -146,12 +152,10 @@ class _OrderState extends State<Order> {
     return false;
   }
 
+  //Adds a procut to the shopping cart
   addToShoppingCart(SingleOrder so) {
     for (SingleOrder soList in singleOrderList) {
       if (soList.identifier == so.identifier) {
-        print('test');
-        print(soList.amount + 1);
-
         soList.amount++;
       }
     }
@@ -166,6 +170,7 @@ class _OrderState extends State<Order> {
     setState(() {});
   }
 
+  // Completely generates the shopping cart item widgets
   updateShoppingCartWidgets(SingleOrder so) {
     shoppingcartWidgets = [];
     for (SingleOrder soList in singleOrderList) {
@@ -179,13 +184,13 @@ class _OrderState extends State<Order> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        changeShoppingCartAmoung(soList, -1);
+                        changeShoppingCartAmount(soList, -1);
                       },
                       icon: Icon(Icons.arrow_back_outlined)),
                   Text(soList.amount.toString()),
                   IconButton(
                       onPressed: () {
-                        changeShoppingCartAmoung(soList, 1);
+                        changeShoppingCartAmount(soList, 1);
                       },
                       icon: Icon(Icons.arrow_forward_outlined)),
                 ],
@@ -197,12 +202,11 @@ class _OrderState extends State<Order> {
     }
   }
 
-  changeShoppingCartAmoung(SingleOrder so, int amount) {
+  //Increases or decreases the amount in the shopping cart
+  changeShoppingCartAmount(SingleOrder so, int amount) {
     if (so.amount == 0 && amount < 0) {
       return;
     }
-    print(so.amount);
-    print(amount);
     so.amount += amount;
     wo.updateOrderValue();
     updateShoppingCartWidgets(so);
