@@ -64,6 +64,7 @@ class writeToDB {
       'standingOrder': order.standingOrder,
       'orderid': orderID
     };
+    print('Standingorder?????: ' + order.standingOrder.toString());
 
     //writes into "orders" table
     orderNode

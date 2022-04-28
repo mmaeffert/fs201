@@ -89,11 +89,12 @@ class _OrderState extends State<Order> {
                                   onChanged: (bool? value) {
                                     setState(() {
                                       standingOrder = value!;
+                                      wo.standingOrder = standingOrder;
                                     });
                                   }),
                               ElevatedButton(
                                   onPressed: () {
-                                    writeToDB().writeOrder(wo);
+                                    sendOrder(wo);
                                   },
                                   child: Text("Bestellung aufgeben"))
                             ],
@@ -127,9 +128,9 @@ class _OrderState extends State<Order> {
           child: GestureDetector(
             child: Card(
               color: currentTheme.getPrimaryColor(),
-              child: Column(
+              child: Row(
                 children: [
-                  Text(product.identifier),
+                  Text(product.identifier, style: TextStyle(fontSize: 15)),
                   Text(product.price.toString())
                 ],
               ),
@@ -220,5 +221,115 @@ class _OrderState extends State<Order> {
       }
     }
     return 0;
+  }
+
+  //processes order
+  sendOrder(WholeOrder _wo) async {
+    var result = await writeToDB().writeOrder(_wo);
+    switch (result) {
+      case "user cant afford":
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text(
+                      "Du hast leider nicht genügend Guthaben für diese Bestellung. Melde dich dafür bei Max"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("OK")),
+                  ]);
+            });
+        break;
+
+      case "empty order":
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text("Du kannst keine leere Bestellung einreichen..."),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Schade")),
+                  ]);
+            });
+        break;
+
+      case "has standingorder":
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text(
+                      "Du hast noch einen offenen Dauerauftrag. Sollen wir ihn ersetzen?"),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          await writeToDB().deleteStandingOrder();
+                          sendOrder(_wo);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("ja")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Nein"))
+                  ]);
+            });
+        break;
+
+      case "has open order":
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text(
+                      "Du hast noch eine offene Bestellung. Sollen wir sie ersetzen?"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          ReadFromDB()
+                              .getOpenOrder()
+                              .then((value) => writeToDB().cancelOrder(value));
+                          sendOrder(_wo);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("ja")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Nein"))
+                  ]);
+            });
+        break;
+
+      case "success":
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text(
+                      "Deine Bestellung ist eingegangen. Thanks for being a Brötchenservice customer"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("OK")),
+                  ]);
+            });
+        break;
+
+      default:
+        print("result: " + result.toString());
+        break;
+    }
   }
 }

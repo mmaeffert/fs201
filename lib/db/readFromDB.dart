@@ -95,6 +95,16 @@ class ReadFromDB with ChangeNotifier {
     return balanceList;
   }
 
+  Future<WholeOrder> getOpenOrder() async {
+    DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
+
+    var openOrder =
+        LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);
+
+    return WholeOrder(await getSingleOrdersFromID(openOrder['orderid']),
+        openOrder['standingOrder'], openOrder['status'], openOrder['orderid']);
+  }
+
   //Gets Produktlist depending on current userrole
   Future<List<Product>> getProductList() async {
     List<Product> productList = [];
