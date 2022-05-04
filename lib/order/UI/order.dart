@@ -6,6 +6,9 @@ import 'package:broetchenservice/themes.dart';
 import 'package:flutter/material.dart';
 import '../../appbar.dart' as ab;
 import '../product.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/tap_bounce_container.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Order extends StatefulWidget {
   const Order({Key? key}) : super(key: key);
@@ -23,6 +26,7 @@ class _OrderState extends State<Order> {
   List<SingleOrder> singleOrderList = [];
   List<Container> shoppingcartWidgets = [];
   bool standingOrder = false;
+  bool orderThrough = false;
 
   @override
   void initState() {
@@ -47,72 +51,85 @@ class _OrderState extends State<Order> {
           ),
 
           //Shoppingcart
-          Expanded(
-              child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: InkWell(
-                    child: AnimatedContainer(
-                      duration: Duration(milliseconds: 250),
-                      color: currentTheme.getPrimaryColor(),
-                      width: MediaQuery.of(context).size.width,
-                      height: checkoutCart,
-                      child: Column(children: [
-                        Row(
-                          children: [
-                            Icon(Icons.shopping_bag, size: 50),
+          WillPopScope(
+              onWillPop: () async {
+                if (checkoutCart > 60) {
+                  checkoutCart = 60;
+                  setState(() {});
+                  return false;
+                }
+                return true;
+              },
+              child: Container(
+                  child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: InkWell(
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 250),
+                          color: currentTheme.getPrimaryColor(),
+                          width: MediaQuery.of(context).size.width,
+                          height: checkoutCart,
+                          child: Column(children: [
+                            Row(
+                              children: [
+                                Icon(Icons.shopping_bag, size: 50),
+                                Container(
+                                  padding: EdgeInsetsDirectional.only(top: 12),
+                                  child: Text(
+                                    wo.wholeOrderValue.toString() + " \$",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: currentTheme.getTextColor(),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+
+                            //Current items in the shopping cart
+                            Column(
+                              children: shoppingcartWidgets,
+                            ),
+
+                            //Finish order area
                             Container(
-                              padding: EdgeInsetsDirectional.only(top: 12),
-                              child: Text(
-                                wo.wholeOrderValue.toString() + " \$",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: currentTheme.getTextColor(),
-                                    fontWeight: FontWeight.bold),
+                              alignment: AlignmentDirectional.bottomCenter,
+                              child: Row(
+                                children: [
+                                  Text("Dauerauftrag  "),
+                                  Checkbox(
+                                      value: standingOrder,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          standingOrder = value!;
+                                          wo.standingOrder = standingOrder;
+                                        });
+                                      }),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        sendOrder(wo).then((value) {
+                                          singleOrderList = [];
+                                          shoppingcartWidgets = [];
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Text("Bestellung aufgeben"))
+                                ],
                               ),
                             )
-                          ],
+                          ]),
                         ),
-
-                        //Current items in the shopping cart
-                        Column(
-                          children: shoppingcartWidgets,
-                        ),
-
-                        //Finish order area
-                        Container(
-                          alignment: AlignmentDirectional.bottomCenter,
-                          child: Row(
-                            children: [
-                              Text("Dauerauftrag  "),
-                              Checkbox(
-                                  value: standingOrder,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      standingOrder = value!;
-                                      wo.standingOrder = standingOrder;
-                                    });
-                                  }),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    sendOrder(wo);
-                                  },
-                                  child: Text("Bestellung aufgeben"))
-                            ],
-                          ),
-                        )
-                      ]),
-                    ),
-                    onTap: () {
-                      if (expanded) {
-                        checkoutCart = 60;
-                        expanded = false;
-                      } else {
-                        checkoutCart = 500;
-                        expanded = true;
-                      }
-                      setState(() {});
-                    },
-                  )))
+                        onTap: () {
+                          if (expanded) {
+                            checkoutCart = 60;
+                            expanded = false;
+                          } else {
+                            checkoutCart = 500;
+                            expanded = true;
+                          }
+                          setState(() {});
+                        },
+                      ))))
         ],
       ),
     );
@@ -123,7 +140,7 @@ class _OrderState extends State<Order> {
 
     for (Product product in productList) {
       cardList.add(Container(
-          width: MediaQuery.of(context).size.width / 2.1,
+          //width: MediaQuery.of(context).size.width / 2.1,
           height: 50,
           child: GestureDetector(
             child: Card(
@@ -131,11 +148,23 @@ class _OrderState extends State<Order> {
               child: Row(
                 children: [
                   Text(product.identifier, style: TextStyle(fontSize: 15)),
-                  Text(product.price.toString())
+                  Text('  ' + product.price.toString())
                 ],
               ),
             ),
             onTap: () {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.success(
+                    icon: Icon(Icons.sentiment_very_satisfied,
+                        color: const Color(0x15000000), size: 60),
+                    backgroundColor: Color.fromARGB(255, 122, 145, 126),
+                    message: "Wurde zum Warenkorb hinzugefügt"),
+                showOutAnimationDuration: Duration(milliseconds: 700),
+                hideOutAnimationDuration: Duration(milliseconds: 300),
+                displayDuration: Duration(milliseconds: 1500),
+                additionalTopPadding: -20,
+              );
               addToShoppingCart(SingleOrder(
                   getAmountOfAProduct(product.identifier), product));
             },
@@ -224,8 +253,9 @@ class _OrderState extends State<Order> {
   }
 
   //processes order
-  sendOrder(WholeOrder _wo) async {
+  Future sendOrder(WholeOrder _wo) async {
     var result = await writeToDB().writeOrder(_wo);
+    orderThrough = true;
     switch (result) {
       case "user cant afford":
         return showDialog(

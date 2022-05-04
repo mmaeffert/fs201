@@ -64,11 +64,14 @@ class ReadFromDB with ChangeNotifier {
     return wholeOrderList;
   }
 
-  getUserBalance() async {
+  Future<double> getUserBalance() async {
     if (user != null) {
       DataSnapshot ds =
           await database.child('/users/' + user!.uid + '/balance/').get();
-      return ds.value;
+      print(ds.value);
+      return double.parse(ds.value.toString());
+    } else {
+      return 0.0;
     }
   }
 
@@ -167,6 +170,9 @@ class ReadFromDB with ChangeNotifier {
   }
 
   Future<bool> userAlreadyExists() async {
+    if (user == null) {
+      return false;
+    }
     DataSnapshot snapshot = await database.child('/users/' + user!.uid).get();
     return snapshot.exists;
   }
@@ -184,10 +190,21 @@ class ReadFromDB with ChangeNotifier {
     return ds.exists;
   }
 
+  checkVersion() async {
+    DataSnapshot ds = await database.child('/versions/').get();
+  }
+
   getStandingOrder() async {
     DataSnapshot ds =
         await database.child('/standingorders/' + user!.uid).get();
     return ds.value;
+  }
+
+  getOrderStatus(String orderID) async {
+    DataSnapshot ds = await database.child('/orders/' + orderID).get();
+    final order =
+        LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);
+    return order['status'];
   }
 
   getSingleOrdersFromID(String orderID) async {
@@ -207,5 +224,12 @@ class ReadFromDB with ChangeNotifier {
     });
 
     return singleOrderList;
+  }
+
+  Future<bool> userHasAssignedClass() async {
+    DataSnapshot ds =
+        await database.child('/users/' + user!.uid + '/class/').get();
+    print('Does he have  class assigned?:  ' + ds.exists.toString());
+    return ds.exists;
   }
 }

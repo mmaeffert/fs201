@@ -8,6 +8,7 @@ import 'appbar.dart';
 import 'order/UI/order.dart';
 import 'themes.dart';
 import './balancePage.dart';
+import './feedback.dart';
 
 class drawer {
   test(BuildContext context) {
@@ -61,7 +62,7 @@ class drawer {
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "Bestellen ✍️",
+                " ✍️ Bestellen",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
@@ -73,7 +74,7 @@ class drawer {
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "Bestellungen 📅",
+                " 📅 Bestellungen",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
@@ -85,7 +86,7 @@ class drawer {
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "💰 Guthaben",
+                " 💰 Guthaben",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
@@ -97,7 +98,7 @@ class drawer {
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "Konto 🔒",
+                " 🔒 Konto",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
@@ -109,13 +110,13 @@ class drawer {
             ListTile(
               contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               title: Text(
-                "Database Beispiel",
+                " 🐛 Feedback",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RTDatabase()));
+                    MaterialPageRoute(builder: (context) => UserFeedback()));
               },
             ),
           ],

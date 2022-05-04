@@ -16,10 +16,9 @@ class Appbar {
       title: Text("🍞 Brötchenservice"),
       actions: [
         showUserProfile(),
-        test(context),
         IconButton(
             onPressed: () => {currentTheme.toggleTheme()},
-            icon: Icon(Icons.brush)),
+            icon: Icon(Icons.sunny))
       ],
     );
   }
@@ -38,7 +37,6 @@ class Appbar {
       ]),
       actions: [
         showUserProfile(),
-        test(context),
         IconButton(
             onPressed: () => {currentTheme.toggleTheme()},
             icon: Icon(Icons.brush)),
@@ -55,17 +53,6 @@ class Appbar {
         backgroundImage:
             NetworkImage(GetCurrentUser().getUser()!.photoURL.toString()),
       );
-    }
-  }
-
-  static test(BuildContext context) {
-    if (Navigator.canPop(context)) {
-      return (IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(Icons.arrow_back_ios_new),
-      ));
-    } else {
-      return SizedBox.shrink();
     }
   }
 }

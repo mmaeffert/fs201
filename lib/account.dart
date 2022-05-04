@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import './appbar.dart' as ab;
 import './googleSignInProvider.dart';
+import 'order/UI/order.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -17,24 +18,59 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   double userBalance = 0.0;
+  TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
-    setUserBalance().then((value) {
-      if (value) {
-        setState(() {});
-      }
-    });
+    setUserBalance();
     super.initState();
   }
 
-  Future<bool> setUserBalance() async {
+  setUserBalance() async {
     if (await ReadFromDB().userAlreadyExists()) {
-      var userBalance = await ReadFromDB().getUserBalance();
+      // userBalance =
+      //     double.parse(await ReadFromDB().getUserBalance().toString());
+      ReadFromDB().getUserBalance().then((value) => userBalance = value);
     }
     print(userBalance);
     this.userBalance = (userBalance == null) ? 0.0 : userBalance.toDouble();
-    return (userBalance == null) ? false : true;
+    setState(() {});
+  }
+
+  assignClass() async {
+    bool userHasAssignedClass = await ReadFromDB().userHasAssignedClass();
+    if (!userHasAssignedClass) {
+      return showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text(
+                    "Herzlich willkommen :) Damit ich weiß wohin die Brötchen gehen, gib bitte deine Klasse an"),
+                actions: [
+                  TextFormField(
+                    maxLength: 10,
+                    maxLines: 1,
+                    controller: textController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(3)))),
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (textController.text != '') {
+                          await writeToDB().assignClass(textController.text);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Order()));
+                        }
+                      },
+                      child: Icon(Icons.send))
+                ]);
+          });
+    }
   }
 
   @override
@@ -49,7 +85,7 @@ class _AccountState extends State<Account> {
               onPressed: () {
                 final provider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.googleLogin();
+                provider.googleLogin().then((value) => assignClass());
               },
               icon: FaIcon(
                 FontAwesomeIcons.google,
@@ -62,8 +98,6 @@ class _AccountState extends State<Account> {
                 return Center(child: CircularProgressIndicator());
               } else if (AsyncSnapshot.hasError) {
                 return Text("Something went wrong :(");
-              } else if (AsyncSnapshot.hasData) {
-                return Center(child: Text(AsyncSnapshot.data.toString()));
               } else {
                 return SizedBox.shrink();
               }
@@ -75,7 +109,6 @@ class _AccountState extends State<Account> {
               label: Text("Refresh"),
               onPressed: () {
                 setUserBalance();
-                setState(() {});
               },
               icon: FaIcon(
                 FontAwesomeIcons.google,

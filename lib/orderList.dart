@@ -129,7 +129,7 @@ class _OrderListState extends State<OrderList> {
           expandedAlignment: Alignment.topLeft,
           title: Row(
             children: [
-              statusIcon[wo.getStatus()] as Icon,
+              statusIcon[wo.status] as Icon,
               Text("  " + getDate(wo.timeStamp) + "  "),
               Text(wo.wholeOrderValue.toStringAsFixed(2) + " €")
             ],
@@ -145,14 +145,16 @@ class _OrderListState extends State<OrderList> {
                 (wo.status == 'o')
                     ? IconButton(
                         onPressed: (() {
+                          print('WO STATUS: ' + wo.status.toString());
                           writeToDB().cancelOrder(wo);
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text(
                                 'Bestellung wurde abgebrochen und der Betrag erstattet'),
                           ));
-                          wo.status = 'c';
-                          setState(() {});
+                          setState(() {
+                            wo.status = 'c';
+                          });
                         }),
                         icon: Icon(Icons.cancel),
                       )

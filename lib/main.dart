@@ -9,26 +9,27 @@ import './appbar.dart' as ab;
 import './bestellen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './googleSignInProvider.dart';
+import './order/UI/order.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
 
-  if(kIsWeb){
+  if (kIsWeb) {
     await Firebase.initializeApp(
       options: FirebaseOptions(
-          apiKey: "AIzaSyBCCcWHUfnVD6dMAm_hNv6_yAWMoO5XkRY",
-          authDomain: "fs201-f4013.firebaseapp.com",
-          databaseURL: "https://fs201-f4013-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "fs201-f4013",
-          storageBucket: "fs201-f4013.appspot.com",
-          messagingSenderId: "557669744446",
-          appId: "1:557669744446:web:5508584d8e59b60f03b66f",
-          measurementId: "G-ZPY0F32Z07",
+        apiKey: "AIzaSyBCCcWHUfnVD6dMAm_hNv6_yAWMoO5XkRY",
+        authDomain: "fs201-f4013.firebaseapp.com",
+        databaseURL:
+            "https://fs201-f4013-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "fs201-f4013",
+        storageBucket: "fs201-f4013.appspot.com",
+        messagingSenderId: "557669744446",
+        appId: "1:557669744446:web:5508584d8e59b60f03b66f",
+        measurementId: "G-ZPY0F32Z07",
       ),
     );
-  }
-  else if(Platform.isAndroid){
+  } else if (Platform.isAndroid) {
     await Firebase.initializeApp();
   }
 
@@ -78,11 +79,17 @@ class MyHome extends StatelessWidget {
   drawer test22 = new drawer();
 
   @override
+  void initState() {}
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: test22.test(context),
       appBar: ab.Appbar.MainAppBar(context),
-      body: Center(child: Bestellen()),
+      body: Image.network(
+        "https://fs201.de/logo.png",
+        width: MediaQuery.of(context).size.width,
+      ),
     );
   }
 }

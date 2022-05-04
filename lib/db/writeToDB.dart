@@ -75,7 +75,7 @@ class writeToDB {
     //writes into "open_orders" table
     database
         .child('/open_orders/')
-        .set({user!.uid: query})
+        .update({user!.uid: query})
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
 
@@ -110,6 +110,10 @@ class writeToDB {
 
   //Cancels an order
   cancelOrder(WholeOrder wo) async {
+    if (await ReadFromDB().getOrderStatus(wo.orderID!) == 'c') {
+      return;
+    }
+
     DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
     ds.ref.remove();
 
@@ -172,5 +176,16 @@ class writeToDB {
     database
         .child('/users/' + user!.uid)
         .update({'balance': currentBalance + balance});
+  }
+
+  Future sendFeedback(String feedback) async {
+    final query = {user!.uid: feedback};
+    database.child('/feedback/').push().set(query);
+  }
+
+  assignClass(String _class) {
+    final query = {'class': _class};
+    database.child('/users/' + user!.uid).update(query);
+    return true;
   }
 }

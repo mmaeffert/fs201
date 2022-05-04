@@ -24,6 +24,10 @@ class CustomTheme with ChangeNotifier {
     notifyListeners();
   }
 
+  static bool _isDarkTheme() {
+    return isDarkTheme;
+  }
+
   static ThemeData get lightTheme {
     return ThemeData(
         fontFamily: 'Poppins',
