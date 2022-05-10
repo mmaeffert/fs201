@@ -32,8 +32,7 @@ class _AccountState extends State<Account> {
       //     double.parse(await ReadFromDB().getUserBalance().toString());
       ReadFromDB().getUserBalance().then((value) => userBalance = value);
     }
-    print(userBalance);
-    this.userBalance = (userBalance == null) ? 0.0 : userBalance.toDouble();
+    userBalance = userBalance.toDouble();
     setState(() {});
   }
 
@@ -45,14 +44,14 @@ class _AccountState extends State<Account> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-                title: Text(
+                title: const Text(
                     "Herzlich willkommen :) Damit ich weiß wohin die Brötchen gehen, gib bitte deine Klasse an"),
                 actions: [
                   TextFormField(
                     maxLength: 10,
                     maxLines: 1,
                     controller: textController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(3)))),
@@ -63,11 +62,13 @@ class _AccountState extends State<Account> {
                           await writeToDB().assignClass(textController.text);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Order()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Order()));
                         }
                       },
-                      child: Icon(Icons.send))
+                      child: const Icon(Icons.send))
                 ]);
           });
     }
@@ -81,13 +82,13 @@ class _AccountState extends State<Account> {
           child: Column(
         children: [
           ElevatedButton.icon(
-              label: Text("Sign in with Google"),
+              label: const Text("Sign in with Google"),
               onPressed: () {
                 final provider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
                 provider.googleLogin().then((value) => assignClass());
               },
-              icon: FaIcon(
+              icon: const FaIcon(
                 FontAwesomeIcons.google,
                 color: Colors.red,
               )),
@@ -95,22 +96,22 @@ class _AccountState extends State<Account> {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, AsyncSnapshot) {
               if (AsyncSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (AsyncSnapshot.hasError) {
-                return Text("Something went wrong :(");
+                return const Text("Something went wrong :(");
               } else {
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               }
             },
           ),
           renderLogOutButton(context),
           Text("Guthaben: " + userBalance.toString()),
           ElevatedButton.icon(
-              label: Text("Refresh"),
+              label: const Text("Refresh"),
               onPressed: () {
                 setUserBalance();
               },
-              icon: FaIcon(
+              icon: const FaIcon(
                 FontAwesomeIcons.google,
                 color: Color.fromARGB(255, 150, 133, 131),
               )),
@@ -125,14 +126,14 @@ class _AccountState extends State<Account> {
       return ElevatedButton.icon(
           onPressed: () {
             FirebaseAuth.instance.signOut();
-            if (this.mounted) {
+            if (mounted) {
               setState(() {});
             }
           },
-          icon: Icon(Icons.logout),
-          label: Text("Log out"));
+          icon: const Icon(Icons.logout),
+          label: const Text("Log out"));
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

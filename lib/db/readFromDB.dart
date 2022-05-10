@@ -19,31 +19,24 @@ class ReadFromDB with ChangeNotifier {
   // Respekt an jeden der versucht das zu verbessern
   // Solltest du es schaffen, verewige dich in diesem Kommentar
   getOrderList() async {
-    print("hello");
-    print(user!.uid);
     List<WholeOrder> wholeOrderList = [];
     DataSnapshot orders;
     LinkedHashMap<String, String> ordersMap;
 
-    orders = await database.child('/user_order/' + user!.uid).get();
-
-    print('orders.value: ' + orders.value.toString());
+    orders = await database
+        .child('/user_order/' + user!.uid)
+        .orderByKey()
+        .limitToLast(10)
+        .get();
 
     ordersMap = LinkedHashMap<String, String>.from(
         orders.value as LinkedHashMap<Object?, Object?>);
 
-    print('ordersMap: ' + ordersMap.toString());
-
     Iterable keySet = ordersMap.keys;
-
-    print('keySet: ' + keySet.toString());
 
     for (String key in keySet) {
       List<SingleOrder> singleOrderList =
           await getSingleOrdersFromID(ordersMap[key]!);
-      print('New SingleOrderList: ' + singleOrderList.toString());
-
-      print('KEY: ' + ordersMap[key]!);
 
       DataSnapshot wholeOrderSnapshot =
           await database.child('/orders/' + ordersMap[key]!).get();
@@ -54,11 +47,8 @@ class ReadFromDB with ChangeNotifier {
           singleOrderList,
           wholeOrderProperties['standingOrder'],
           wholeOrderProperties['status'],
-          wholeOrderProperties['orderid']));
-    }
-
-    for (WholeOrder wo in wholeOrderList) {
-      print('NEW WHOLEORDER:\n ' + wo.toString());
+          wholeOrderProperties['orderid'],
+          wholeOrderProperties['timestamp']));
     }
 
     return wholeOrderList;
@@ -68,7 +58,6 @@ class ReadFromDB with ChangeNotifier {
     if (user != null) {
       DataSnapshot ds =
           await database.child('/users/' + user!.uid + '/balance/').get();
-      print(ds.value);
       return double.parse(ds.value.toString());
     } else {
       return 0.0;
@@ -82,12 +71,11 @@ class ReadFromDB with ChangeNotifier {
     var balanceMap =
         LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);
 
-    Iterable<dynamic> keySet = balanceMap.keys as Iterable<dynamic>;
+    Iterable<dynamic> keySet = balanceMap.keys;
 
     List<Balance> balanceList = [];
 
     for (String key in keySet) {
-      print(balanceMap[key]['balance']);
       balanceList.add(Balance(
           int.parse(key),
           double.parse(balanceMap[key]['balance'].toString()),
@@ -100,7 +88,6 @@ class ReadFromDB with ChangeNotifier {
 
   Future<WholeOrder> getOpenOrder() async {
     DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
-    print('ds VALUE: from ' + user!.uid + ' is ' + ds.value.toString());
     ds = await database.child('/orders/' + ds.value.toString()).get();
 
     var openOrder =
@@ -123,7 +110,7 @@ class ReadFromDB with ChangeNotifier {
     LinkedHashMap<Object?, Object?> productMap =
         LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);
 
-    Iterable<dynamic?> keySet = productMap.keys;
+    Iterable<dynamic> keySet = productMap.keys;
 
     for (String key in keySet) {
       LinkedHashMap priceForUser =
@@ -132,9 +119,6 @@ class ReadFromDB with ChangeNotifier {
       productList
           .add(Product(double.parse(priceForUser[userRole].toString()), key));
     }
-
-    print("PRODUCTLIST" + productList.toString());
-
     return productList;
   }
 
@@ -143,9 +127,6 @@ class ReadFromDB with ChangeNotifier {
     var userBalance = await getUserBalance();
     userBalance = userBalance.toDouble();
     double userBalanceLimit = await getUserBalanceLimit();
-
-    print('claculation: ' +
-        ((userBalance + balanceToAdd) >= userBalanceLimit).toString());
 
     return ((userBalance + balanceToAdd) >= userBalanceLimit);
   }
@@ -158,7 +139,6 @@ class ReadFromDB with ChangeNotifier {
         .child('/balance_limit/' + userRole)
         .get()
         .then((value) => userBalance = value.value);
-    print('USERBALANCE LIMIT: ' + userBalance.toString());
     return userBalance.toDouble();
   }
 
@@ -167,7 +147,6 @@ class ReadFromDB with ChangeNotifier {
     await database.child('/users/' + user!.uid + '/role/').get().then((value) {
       userRole = value.value as String;
     });
-    print('USER ROLE: ' + userRole);
     return userRole;
   }
 
@@ -181,7 +160,6 @@ class ReadFromDB with ChangeNotifier {
 
   userAlreadyHasOpenOrder() async {
     DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
-    print('has open order: ' + ds.exists.toString());
     return ds.exists;
   }
 
@@ -190,10 +168,6 @@ class ReadFromDB with ChangeNotifier {
         await database.child('/standingorders/' + user!.uid).get();
 
     return ds.exists;
-  }
-
-  checkVersion() async {
-    DataSnapshot ds = await database.child('/versions/').get();
   }
 
   getStandingOrder() async {
@@ -217,12 +191,12 @@ class ReadFromDB with ChangeNotifier {
         .get()
         .then((composition) {
       final data = composition.value as List<dynamic>;
-      data.forEach((key) {
+      for (var key in data) {
         final temp = new SingleOrder(
             key['amount'], new Product(key['price'], key['identifier']));
 
         singleOrderList.add(temp);
-      });
+      }
     });
 
     return singleOrderList;

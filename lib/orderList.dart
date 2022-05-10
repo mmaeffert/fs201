@@ -11,7 +11,8 @@ import 'dart:io';
 import './appbar.dart' as ab;
 
 class OrderList extends StatefulWidget {
-  const OrderList({Key? key}) : super(key: key);
+  final List<String> openTiles;
+  const OrderList({Key? key, required this.openTiles}) : super(key: key);
 
   @override
   State<OrderList> createState() => _OrderListState();
@@ -118,12 +119,17 @@ class _OrderListState extends State<OrderList> {
 
   Future<List<WholeOrder>> getChildrenList() async {
     List<WholeOrder> wholeOrderList = await ReadFromDB().getOrderList();
+    wholeOrderList.sort((WholeOrder wo1, WholeOrder wo2) {
+      return wo2.timeStamp - wo1.timeStamp;
+    });
 
     print('WHOLEORDERLIST: ' + wholeOrderList.toString());
 
     for (WholeOrder wo in wholeOrderList) {
       tileList.add(
         ExpansionTile(
+          initiallyExpanded:
+              widget.openTiles.contains(wo.orderID) ? true : false,
           textColor: Color.fromARGB(255, 52, 69, 77),
           childrenPadding: EdgeInsets.only(left: 15),
           expandedAlignment: Alignment.topLeft,

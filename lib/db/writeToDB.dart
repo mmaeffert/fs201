@@ -9,20 +9,18 @@ class writeToDB {
   final user = FirebaseAuth.instance.currentUser;
 
   //Writes an Order to DB
-  Future<String> writeOrder(WholeOrder order) async {
+  Future<dynamic> writeOrder(WholeOrder order) async {
     //Checks if user can afford
     bool userCanAfford = false;
     await ReadFromDB()
         .userCanAfford(order.getOrderValue())
         .then((value) => userCanAfford = value);
 
-    print('Can he afford?: ' + userCanAfford.toString());
     if (!userCanAfford) {
       return "user cant afford";
     }
 
     //Checks if order is empty
-    bool isEmptyOrder = true;
     int orderAmountSum = 0;
     for (SingleOrder so in order.orderList) {
       orderAmountSum += so.amount;
@@ -46,13 +44,13 @@ class writeToDB {
     final orderID = orderNode.key;
     //Create composition JSON data
     var orderListJson = [];
-    order.orderList.forEach((singleOrder) {
+    for (var singleOrder in order.orderList) {
       orderListJson.add({
         'identifier': singleOrder.identifier,
         'amount': singleOrder.amount,
         'price': singleOrder.price,
       });
-    });
+    }
 
     //Creates wholeorder Object as JSON
     var query = <String, dynamic>{
@@ -64,48 +62,30 @@ class writeToDB {
       'standingOrder': order.standingOrder,
       'orderid': orderID
     };
-    print('Standingorder?????: ' + order.standingOrder.toString());
 
     //writes into "orders" table
-    orderNode
-        .set(query)
-        .then((value) => print("Erfolgreich geschrieben"))
-        .catchError((onError) => print(onError));
+    orderNode.set(query);
 
     //writes into "open_orders" table
-    database
-        .child('/open_orders/')
-        .update({user!.uid: orderID})
-        .then((value) => print("Erfolgreich geschrieben"))
-        .catchError((onError) => print(onError));
+    database.child('/open_orders/').update({user!.uid: orderID});
 
     //Writes into "standingorders"
     if (order.standingOrder) {
-      database
-          .child('/standingorders/')
-          .set({user!.uid: order.orderID})
-          .then((value) => print("Erfolgreich geschrieben"))
-          .catchError((onError) => print(onError));
+      database.child('/standingorders/').set({user!.uid: order.orderID});
     }
 
     //Writes into assist table user_order, which saves the orders a certain user did
-    database
-        .child('/user_order/' + user!.uid)
-        .push()
-        .set(orderID)
-        .then((value) => print("Erfolgreich geschrieben"))
-        .catchError((onError) => print(onError));
-
+    database.child('/user_order/' + user!.uid).push().set(orderID);
     //calculates the value of the whole order
     double orderValue = 0;
-    order.orderList.forEach((singleOrder) {
+    for (var singleOrder in order.orderList) {
       orderValue += singleOrder.amount * singleOrder.price;
-    });
+    }
 
     //makes entry in "balance" table
     changeUserBalance(orderValue * (-1), "from order", orderID!);
 
-    return "success";
+    return ["success", orderID];
   }
 
   //Cancels an order
@@ -149,10 +129,7 @@ class writeToDB {
       }
     });
 
-    userEntry
-        .update(query)
-        .then((value) => print("Erfolgreich geschrieben"))
-        .catchError((onError) => print(onError));
+    userEntry.update(query);
   }
 
   //Changes user balance positively or negatively
@@ -170,10 +147,7 @@ class writeToDB {
       }
     };
 
-    balanceTable
-        .update(query)
-        .then((value) => print("Erfolgreich geschrieben"))
-        .catchError((onError) => print(onError));
+    balanceTable.update(query);
 
     var currentBalance = await ReadFromDB().getUserBalance();
     currentBalance = (currentBalance == null) ? 0.0 : currentBalance.toDouble();

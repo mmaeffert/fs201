@@ -24,10 +24,7 @@ class _WriteExampleState extends State<WriteExample> {
       child: Column(children: [
         ElevatedButton(
             onPressed: () {
-              dailySpecial
-                  .set({'koernerbroetchen': 2.5})
-                  .then((value) => print("Erfolgreich geschrieben"))
-                  .catchError((onError) => print(onError));
+              dailySpecial.set({'koernerbroetchen': 2.5});
             },
             child: Text("Setze Brötchen")),
         ElevatedButton(
@@ -47,17 +44,17 @@ class _WriteExampleState extends State<WriteExample> {
   writeOrder() {
     //Create SingleOrder List
     List<SingleOrder> sol = [
-      new SingleOrder(
+      SingleOrder(
           3,
           Product(
             0.3,
             "Kaiser Brötchen",
           )),
-      new SingleOrder(1, Product(0.8, "Körner Brötchen")),
+      SingleOrder(1, Product(0.8, "Körner Brötchen")),
     ];
 
     //Create WholeOrder Object which sets userID and Value
-    WholeOrder wo = new WholeOrder(sol, true, 'o');
+    WholeOrder wo = WholeOrder(sol, true, 'o');
 
     //Write Whole Order to DB
     writeToDB().writeOrder(wo);

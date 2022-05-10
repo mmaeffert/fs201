@@ -2,6 +2,7 @@ import 'package:broetchenservice/db/readFromDB.dart';
 import 'package:broetchenservice/db/writeToDB.dart';
 import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/order/wholeOrder.dart';
+import 'package:broetchenservice/orderList.dart';
 import 'package:broetchenservice/themes.dart';
 import 'package:flutter/material.dart';
 import '../../appbar.dart' as ab;
@@ -19,7 +20,7 @@ class Order extends StatefulWidget {
 class _OrderState extends State<Order> {
   double checkoutCart = 60;
   bool expanded = false;
-  WholeOrder wo = new WholeOrder([], false, 'o');
+  WholeOrder wo = WholeOrder([], false, 'o');
   List<Container> cardList = [];
   bool isloaded = false;
   List<SingleOrder> singleOrderList = [];
@@ -88,7 +89,7 @@ class _OrderState extends State<Order> {
                               builder: (BuildContext context) {
                                 return StatefulBuilder(builder:
                                     (BuildContext context,
-                                        StateSetter setModalState) {
+                                        StateSetter setState) {
                                   return Column(children: [
                                     Row(
                                       children: [
@@ -112,8 +113,8 @@ class _OrderState extends State<Order> {
                                     //Current items in the shopping cart
                                     Expanded(
                                       child: ListView(
-                                        children: shoppingcartWidgets,
-                                      ),
+                                          children: updateShoppingCartWidgets(
+                                              context, setState)),
                                     ),
 
                                     //Finish order area
@@ -153,87 +154,6 @@ class _OrderState extends State<Order> {
                               });
                         });
                   }))
-
-          //Shoppingcart
-          // WillPopScope(
-          //     onWillPop: () async {
-          //       if (checkoutCart > 60) {
-          //         checkoutCart = 60;
-          //         setState(() {});
-          //         return false;
-          //       }
-          //       return true;
-          //     },
-          //     child: Container(
-          //         child: Align(
-          //             alignment: FractionalOffset.bottomCenter,
-          //             child: InkWell(
-          //               child: AnimatedContainer(
-          //                 duration: Duration(milliseconds: 250),
-          //                 color: currentTheme.getPrimaryColor(),
-          //                 width: MediaQuery.of(context).size.width,
-          //                 height: checkoutCart,
-          //                 child: Column(children: [
-          //                   Row(
-          //                     children: [
-          //                       Icon(Icons.shopping_bag, size: 50),
-          //                       Container(
-          //                         padding: EdgeInsetsDirectional.only(top: 12),
-          //                         child: Text(
-          //                           wo.wholeOrderValue.toString() + " \$",
-          //                           style: TextStyle(
-          //                               fontSize: 20,
-          //                               color: currentTheme.getTextColor(),
-          //                               fontWeight: FontWeight.bold),
-          //                         ),
-          //                       )
-          //                     ],
-          //                   ),
-
-          //                   //Current items in the shopping cart
-          //                   Column(
-          //                     children: shoppingcartWidgets,
-          //                   ),
-
-          //                   //Finish order area
-          //                   Container(
-          //                     alignment: AlignmentDirectional.bottomCenter,
-          //                     child: Row(
-          //                       children: [
-          //                         Text("Dauerauftrag  "),
-          //                         Checkbox(
-          //                             value: standingOrder,
-          //                             onChanged: (bool? value) {
-          //                               setState(() {
-          //                                 standingOrder = value!;
-          //                                 wo.standingOrder = standingOrder;
-          //                               });
-          //                             }),
-          //                         ElevatedButton(
-          //                             onPressed: () {
-          //                               sendOrder(wo).then((value) {
-          //                                 singleOrderList = [];
-          //                                 shoppingcartWidgets = [];
-          //                                 setState(() {});
-          //                               });
-          //                             },
-          //                             child: Text("Bestellung aufgeben"))
-          //                       ],
-          //                     ),
-          //                   )
-          //                 ]),
-          //               ),
-          //               onTap: () {
-          //                 if (expanded) {
-          //                   checkoutCart = 60;
-          //                   expanded = false;
-          //                 } else {
-          //                   checkoutCart = 500;
-          //                   expanded = true;
-          //                 }
-          //                 setState(() {});
-          //               },
-          //             ))))
         ],
       ),
     );
@@ -322,14 +242,13 @@ class _OrderState extends State<Order> {
       singleOrderList.add(SingleOrder(1, Product(so.price, so.identifier)));
     }
 
-    updateShoppingCartWidgets();
     wo.updateOrderValue();
 
     setState(() {});
   }
 
   // Completely generates the shopping cart item widgets
-  updateShoppingCartWidgets() {
+  updateShoppingCartWidgets(BuildContext context, StateSetter setState) {
     shoppingcartWidgets = [];
     for (SingleOrder soList in singleOrderList) {
       if (soList.amount > 0) {
@@ -344,6 +263,7 @@ class _OrderState extends State<Order> {
                   IconButton(
                       onPressed: () {
                         changeShoppingCartAmount(soList, -1);
+                        updateShoppingCartWidgets(context, setState);
                         setState(() {});
                       },
                       icon: Icon(Icons.arrow_back_outlined)),
@@ -351,6 +271,7 @@ class _OrderState extends State<Order> {
                   IconButton(
                       onPressed: () {
                         changeShoppingCartAmount(soList, 1);
+                        updateShoppingCartWidgets(context, setState);
                         setState(() {});
                       },
                       icon: Icon(Icons.arrow_forward_outlined)),
@@ -361,6 +282,7 @@ class _OrderState extends State<Order> {
         ));
       }
     }
+    return shoppingcartWidgets;
   }
 
   //Increases or decreaschangeShoppingCartAmountes the amount in the shopping cart
@@ -371,7 +293,6 @@ class _OrderState extends State<Order> {
     }
     so.amount += amount;
     wo.updateOrderValue();
-    updateShoppingCartWidgets();
     setState(() {});
   }
 
@@ -384,76 +305,11 @@ class _OrderState extends State<Order> {
     return 0;
   }
 
-  //Shows bottom sheet
-  _showBottonSheet() {
-    showModalBottomSheet(
-        backgroundColor: currentTheme.getPrimaryColor(),
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter modalSetState) {
-            return Column(children: [
-              Row(
-                children: [
-                  Icon(Icons.shopping_bag, size: 50),
-                  Container(
-                    padding: EdgeInsetsDirectional.only(top: 12),
-                    child: Text(
-                      wo.wholeOrderValue.toString() + " \$",
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: currentTheme.getTextColor(),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-
-              //Current items in the shopping cart
-              Expanded(
-                child: ListView(
-                  children: shoppingcartWidgets,
-                ),
-              ),
-
-              //Finish order area
-              Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Container(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  child: Row(
-                    children: [
-                      Text("Dauerauftrag  "),
-                      Checkbox(
-                          value: standingOrder,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              standingOrder = value!;
-                              wo.standingOrder = standingOrder;
-                            });
-                          }),
-                      ElevatedButton(
-                          onPressed: () {
-                            sendOrder(wo).then((value) {
-                              singleOrderList = [];
-                              shoppingcartWidgets = [];
-                              setState(() {});
-                            });
-                          },
-                          child: Text("Bestellung aufgeben"))
-                    ],
-                  ),
-                ),
-              )
-            ]);
-          });
-        });
-  }
-
   //processes order
   Future sendOrder(WholeOrder _wo) async {
     var result = await writeToDB().writeOrder(_wo);
     orderThrough = true;
+    print('RESULT:  ' + result.toString());
     switch (result) {
       case "user cant afford":
         return showDialog(
@@ -538,26 +394,32 @@ class _OrderState extends State<Order> {
             });
         break;
 
-      case "success":
-        setState(() {});
-        return showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                  title: Text(
-                      "Deine Bestellung ist eingegangen. Thanks for being a Brötchenservice customer"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("OK")),
-                  ]);
-            });
-        break;
-
       default:
-        print("result: " + result.toString());
+        if (result[0] == 'success') {
+          setState(() {});
+          return showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    title: Text(
+                        "Deine Bestellung ist eingegangen. Thanks for being a Brötchenservice customer"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderList(
+                                          openTiles: [result[1].toString()],
+                                        )));
+                          },
+                          child: Text("OK")),
+                    ]);
+              });
+        }
         break;
     }
   }
