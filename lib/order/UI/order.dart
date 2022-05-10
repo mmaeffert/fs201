@@ -50,7 +50,7 @@ class _OrderState extends State<Order> {
           // Cards with Product Information
           ListView(
             children: !isloaded
-                ? [const CircularProgressIndicator()]
+                ? [CircularProgressIndicator()]
                 : cardList +
                     [
                       Container(
@@ -67,18 +67,19 @@ class _OrderState extends State<Order> {
                     alignment: FractionalOffset.bottomCenter,
                     width: MediaQuery.of(context).size.width,
                     child: Row(children: [
-                      const Icon(
+                      Icon(
                         Icons.shopping_bag,
                         size: 50,
                       ),
                       Text(
                         wo.wholeOrderValue.toString() + ' Euro',
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       )
                     ]),
                   ),
                   //onTap: () => _showBottonSheet(),
                   onTap: () {
+                    print(':(');
                     showModalBottomSheet(
                         backgroundColor: currentTheme.getPrimaryColor(),
                         context: context,
@@ -92,12 +93,10 @@ class _OrderState extends State<Order> {
                                   return Column(children: [
                                     Row(
                                       children: [
-                                        const Icon(Icons.shopping_bag,
-                                            size: 50),
+                                        Icon(Icons.shopping_bag, size: 50),
                                         Container(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  top: 12),
+                                          padding: EdgeInsetsDirectional.only(
+                                              top: 12),
                                           child: Text(
                                             wo.wholeOrderValue.toString() +
                                                 " \$",
@@ -126,7 +125,7 @@ class _OrderState extends State<Order> {
                                             AlignmentDirectional.bottomCenter,
                                         child: Row(
                                           children: [
-                                            const Text("Dauerauftrag  "),
+                                            Text("Dauerauftrag  "),
                                             Checkbox(
                                                 value: standingOrder,
                                                 onChanged: (bool? value) {
@@ -144,8 +143,8 @@ class _OrderState extends State<Order> {
                                                     setState(() {});
                                                   });
                                                 },
-                                                child: const Text(
-                                                    "Bestellung aufgeben"))
+                                                child:
+                                                    Text("Bestellung aufgeben"))
                                           ],
                                         ),
                                       ),
@@ -172,12 +171,11 @@ class _OrderState extends State<Order> {
               color: CustomTheme.darkTheme.backgroundColor,
               child: Row(
                 children: [
-                  Text(product.identifier,
-                      style: const TextStyle(fontSize: 20)),
-                  const Spacer(),
+                  Text(product.identifier, style: TextStyle(fontSize: 20)),
+                  Spacer(),
                   Text(
                     '  ' + product.price.toString() + ' €   ',
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20),
                   ),
                   Container(
                     alignment: Alignment.centerRight,
@@ -191,24 +189,24 @@ class _OrderState extends State<Order> {
                         onPressed: () {
                           showTopSnackBar(
                             context,
-                            const CustomSnackBar.success(
+                            CustomSnackBar.success(
                                 icon: Icon(Icons.sentiment_very_satisfied,
-                                    color: Color(0x15000000), size: 60),
+                                    color: const Color(0x15000000), size: 60),
                                 backgroundColor:
                                     Color.fromARGB(255, 122, 145, 126),
                                 message: "Wurde zum Warenkorb hinzugefügt"),
                             showOutAnimationDuration:
-                                const Duration(milliseconds: 700),
+                                Duration(milliseconds: 700),
                             hideOutAnimationDuration:
-                                const Duration(milliseconds: 300),
-                            displayDuration: const Duration(milliseconds: 1500),
+                                Duration(milliseconds: 300),
+                            displayDuration: Duration(milliseconds: 1500),
                             additionalTopPadding: -20,
                           );
                           addToShoppingCart(SingleOrder(
                               getAmountOfAProduct(product.identifier),
                               product));
                         },
-                        icon: const Icon(Icons.plus_one_outlined)),
+                        icon: Icon(Icons.plus_one_outlined)),
                   )
                 ],
               ),
@@ -259,7 +257,7 @@ class _OrderState extends State<Order> {
             children: [
               Text(soList.identifier),
               Text(soList.price.toString() + ' \$'),
-              const Spacer(),
+              Spacer(),
               Row(
                 children: [
                   IconButton(
@@ -268,7 +266,7 @@ class _OrderState extends State<Order> {
                         updateShoppingCartWidgets(context, setState);
                         setState(() {});
                       },
-                      icon: const Icon(Icons.arrow_back_outlined)),
+                      icon: Icon(Icons.arrow_back_outlined)),
                   Text(soList.amount.toString()),
                   IconButton(
                       onPressed: () {
@@ -276,7 +274,7 @@ class _OrderState extends State<Order> {
                         updateShoppingCartWidgets(context, setState);
                         setState(() {});
                       },
-                      icon: const Icon(Icons.arrow_forward_outlined)),
+                      icon: Icon(Icons.arrow_forward_outlined)),
                 ],
               )
             ],
@@ -289,6 +287,7 @@ class _OrderState extends State<Order> {
 
   //Increases or decreaschangeShoppingCartAmountes the amount in the shopping cart
   changeShoppingCartAmount(SingleOrder so, int amount) {
+    print(wo);
     if (so.amount == 0 && amount < 0) {
       return;
     }
@@ -310,45 +309,47 @@ class _OrderState extends State<Order> {
   Future sendOrder(WholeOrder _wo) async {
     var result = await writeToDB().writeOrder(_wo);
     orderThrough = true;
+    print('RESULT:  ' + result.toString());
     switch (result) {
       case "user cant afford":
         return showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                  title: const Text(
+                  title: Text(
                       "Du hast leider nicht genügend Guthaben für diese Bestellung. Melde dich dafür bei Max"),
                   actions: [
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text("OK")),
+                        child: Text("OK")),
                   ]);
             });
+        break;
 
       case "empty order":
         return showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                  title: const Text(
-                      "Du kannst keine leere Bestellung einreichen..."),
+                  title: Text("Du kannst keine leere Bestellung einreichen..."),
                   actions: [
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text("Schade")),
+                        child: Text("Schade")),
                   ]);
             });
+        break;
 
       case "has standingorder":
         return showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                  title: const Text(
+                  title: Text(
                       "Du hast noch einen offenen Dauerauftrag. Sollen wir ihn ersetzen?"),
                   actions: [
                     TextButton(
@@ -357,21 +358,22 @@ class _OrderState extends State<Order> {
                           sendOrder(_wo);
                           Navigator.of(context).pop();
                         },
-                        child: const Text("ja")),
+                        child: Text("ja")),
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text("Nein"))
+                        child: Text("Nein"))
                   ]);
             });
+        break;
 
       case "has open order":
         return showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                  title: const Text(
+                  title: Text(
                       "Du hast noch eine offene Bestellung. Sollen wir sie ersetzen?"),
                   actions: [
                     TextButton(
@@ -382,14 +384,15 @@ class _OrderState extends State<Order> {
                           sendOrder(_wo);
                           Navigator.of(context).pop();
                         },
-                        child: const Text("ja")),
+                        child: Text("ja")),
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text("Nein"))
+                        child: Text("Nein"))
                   ]);
             });
+        break;
 
       default:
         if (result[0] == 'success') {
@@ -398,7 +401,7 @@ class _OrderState extends State<Order> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                    title: const Text(
+                    title: Text(
                         "Deine Bestellung ist eingegangen. Thanks for being a Brötchenservice customer"),
                     actions: [
                       TextButton(
@@ -413,7 +416,7 @@ class _OrderState extends State<Order> {
                                           openTiles: [result[1].toString()],
                                         )));
                           },
-                          child: const Text("OK")),
+                          child: Text("OK")),
                     ]);
               });
         }

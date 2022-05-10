@@ -192,8 +192,8 @@ class ReadFromDB with ChangeNotifier {
         .then((composition) {
       final data = composition.value as List<dynamic>;
       for (var key in data) {
-        final temp = SingleOrder(
-            key['amount'], Product(key['price'], key['identifier']));
+        final temp = new SingleOrder(
+            key['amount'], new Product(key['price'], key['identifier']));
 
         singleOrderList.add(temp);
       }
@@ -205,6 +205,7 @@ class ReadFromDB with ChangeNotifier {
   Future<bool> userHasAssignedClass() async {
     DataSnapshot ds =
         await database.child('/users/' + user!.uid + '/class/').get();
+    print('Does he have  class assigned?:  ' + ds.exists.toString());
     return ds.exists;
   }
 }

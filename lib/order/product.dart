@@ -15,8 +15,8 @@ class Product {
   double price = 0;
 
   Product(this.price, this.identifier) {
-    identifier = identifier;
-    price = price;
+    this.identifier = identifier;
+    this.price = price;
   }
 
   static DropDownProducts(Product chosenProduct, List<Product> salableProducts,
@@ -24,7 +24,7 @@ class Product {
     return Row(
       children: [
         Container(
-            margin: const EdgeInsets.only(right: 8),
+            margin: EdgeInsets.only(right: 8),
             child: const Text(
               "Brötchensorte: ",
               style: TextStyle(fontSize: 16),
@@ -37,7 +37,7 @@ class Product {
             return DropdownMenuItem<Product>(
               value: product,
               child: Container(
-                margin: const EdgeInsets.all(5),
+                margin: EdgeInsets.all(5),
                 child: RichText(
                   text: TextSpan(
                     children: <TextSpan>[
@@ -72,7 +72,7 @@ class Product {
             );
           }).toList(),
           value: chosenProduct,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16),
           onChanged: onChanged,
         ),
       ],

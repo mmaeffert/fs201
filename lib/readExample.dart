@@ -18,12 +18,12 @@ class _ReadExampleState extends State<ReadExample> {
             onPressed: () {
               ReadFromDB().getOrderList();
             },
-            child: const Text("getOrderList")),
+            child: Text("getOrderList")),
         ElevatedButton(
             onPressed: () {
               ReadFromDB().getOrderList();
             },
-            child: const Text("getWholeOrderList")),
+            child: Text("getWholeOrderList")),
       ]),
     ));
   }

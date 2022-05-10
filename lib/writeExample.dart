@@ -26,17 +26,17 @@ class _WriteExampleState extends State<WriteExample> {
             onPressed: () {
               dailySpecial.set({'koernerbroetchen': 2.5});
             },
-            child: const Text("Setze Brötchen")),
+            child: Text("Setze Brötchen")),
         ElevatedButton(
             onPressed: () {
               writeOrder();
             },
-            child: const Text("Speicher Bestellung")),
+            child: Text("Speicher Bestellung")),
         ElevatedButton(
             onPressed: () {
               writeToDB().changeUserBalance(10, "Guthaben aufgelade", "");
             },
-            child: const Text("Change balance")),
+            child: Text("Change balance")),
       ]),
     ));
   }

@@ -21,7 +21,7 @@ class _UserFeedbackState extends State<UserFeedback> {
         TextFormField(
           style: TextStyle(color: currentTheme.getTextColor()),
           controller: textController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(3)))),
         ),
@@ -34,21 +34,21 @@ class _UserFeedbackState extends State<UserFeedback> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text(
+                              title: Text(
                                   "Dein Feedback wurde eingereicht. Ich weiß deine Mitarbeit zu schätzen :*"),
                               actions: [
                                 ElevatedButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text("OK"))
+                                    child: Text("OK"))
                               ],
                             );
                           })
                     });
               }
             },
-            child: const Icon(Icons.send))
+            child: Icon(Icons.send))
       ]),
     );
   }

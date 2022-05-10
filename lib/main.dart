@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 import './themes.dart';
 import './drawer.dart';
 import './appbar.dart' as ab;
+import './bestellen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './googleSignInProvider.dart';
+import './order/UI/order.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +17,7 @@ void main() async {
 
   if (kIsWeb) {
     await Firebase.initializeApp(
-      options: const FirebaseOptions(
+      options: FirebaseOptions(
         apiKey: "AIzaSyBCCcWHUfnVD6dMAm_hNv6_yAWMoO5XkRY",
         authDomain: "fs201-f4013.firebaseapp.com",
         databaseURL:
@@ -74,9 +76,10 @@ MaterialApp(
 }
 
 class MyHome extends StatelessWidget {
-  drawer test22 = drawer();
+  drawer test22 = new drawer();
 
-  MyHome({Key? key}) : super(key: key);
+  @override
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {

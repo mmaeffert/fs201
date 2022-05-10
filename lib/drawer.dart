@@ -1,7 +1,9 @@
 import 'package:broetchenservice/balancePage.dart';
 import 'package:broetchenservice/orderList.dart';
 import 'package:flutter/material.dart';
+import './dauerauftrag.dart';
 import './account.dart';
+import './realTimeDatabaseExample.dart';
 import 'appbar.dart';
 import 'order/UI/order.dart';
 import 'themes.dart';
@@ -37,43 +39,41 @@ class drawer {
                                   .getUser()!
                                   .displayName!
                                   .substring(0, 1),
-                              style: const TextStyle(fontSize: 40.0),
+                              style: TextStyle(fontSize: 40.0),
                             )
                           : Container(),
                     ),
                   )
                 : UserAccountsDrawerHeader(
-                    accountName: const Text("Gast"),
-                    accountEmail: const Text("gast@gmail.com"),
+                    accountName: Text("Gast"),
+                    accountEmail: Text("gast@gmail.com"),
                     currentAccountPicture: CircleAvatar(
                       backgroundColor: CustomTheme.isDarkTheme
                           ? CustomTheme.darkTheme.backgroundColor
                               .withOpacity(0.8)
                           : CustomTheme.lightTheme.backgroundColor
                               .withOpacity(0.8),
-                      child: const Text(
+                      child: Text(
                         "G",
                         style: TextStyle(fontSize: 40.0),
                       ),
                     ),
                   ),
             ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              title: const Text(
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              title: Text(
                 " ✍️ Bestellen",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Order()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Order()));
               },
             ),
             ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              title: const Text(
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              title: Text(
                 " 📅 Bestellungen",
                 style: TextStyle(fontSize: 25),
               ),
@@ -82,52 +82,45 @@ class drawer {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const OrderList(
+                        builder: (context) => OrderList(
                               openTiles: [],
                             )));
               },
             ),
             ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              title: const Text(
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              title: Text(
                 " 💰 Guthaben",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BalancePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BalancePage()));
               },
             ),
             ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              title: const Text(
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              title: Text(
                 " 🔒 Konto",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Account()));
+                    MaterialPageRoute(builder: (context) => Account()));
               },
             ),
             ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              title: const Text(
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              title: Text(
                 " 🐛 Feedback",
                 style: TextStyle(fontSize: 25),
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const UserFeedback()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserFeedback()));
               },
             ),
           ],
