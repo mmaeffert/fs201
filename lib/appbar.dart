@@ -13,12 +13,12 @@ class Appbar {
   static MainAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
-      title: Text("🍞 Brötchenservice"),
+      title: const Text("🍞 Brötchenservice"),
       actions: [
         showUserProfile(),
         IconButton(
             onPressed: () => {currentTheme.toggleTheme()},
-            icon: Icon(Icons.sunny))
+            icon: const Icon(Icons.sunny))
       ],
     );
   }
@@ -26,8 +26,8 @@ class Appbar {
   static TabAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
-      title: Text("🍞 Brötchenservice"),
-      bottom: TabBar(tabs: [
+      title: const Text("🍞 Brötchenservice"),
+      bottom: const TabBar(tabs: [
         Tab(
           text: "Bestellungen",
         ),
@@ -39,14 +39,14 @@ class Appbar {
         showUserProfile(),
         IconButton(
             onPressed: () => {currentTheme.toggleTheme()},
-            icon: Icon(Icons.brush)),
+            icon: const Icon(Icons.brush)),
       ],
     );
   }
 
   static showUserProfile() {
     if (GetCurrentUser().getUser() == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     } else {
       return CircleAvatar(
         radius: 21,

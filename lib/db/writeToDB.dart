@@ -150,8 +150,7 @@ class writeToDB {
     balanceTable.update(query);
 
     var currentBalance = await ReadFromDB().getUserBalance();
-    currentBalance = (currentBalance == null) ? 0.0 : currentBalance.toDouble();
-    print('Current balance: ' + currentBalance.toString());
+    currentBalance = currentBalance.toDouble();
     database
         .child('/users/' + user!.uid)
         .update({'balance': currentBalance + balance});

@@ -13,11 +13,11 @@ class SingleOrder extends Product {
   @override
   toString() {
     return ('-Preis: ' +
-        this.price.toString() +
+        price.toString() +
         '\n-Identifier: ' +
-        this.identifier +
+        identifier +
         '\n-Amount: ' +
-        this.amount.toString());
+        amount.toString());
   }
 
   int amount;

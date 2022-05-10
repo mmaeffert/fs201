@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './main.dart';
 import './appbar.dart' as ab;
 
 class Dauerauftrag extends StatefulWidget {
@@ -14,7 +13,7 @@ class _DauerauftragState extends State<Dauerauftrag> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ab.Appbar.MainAppBar(context),
-      body: Text("Hans"),
+      body: const Text("Hans"),
     );
   }
 }

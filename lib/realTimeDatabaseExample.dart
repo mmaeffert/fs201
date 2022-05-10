@@ -1,6 +1,5 @@
 import 'package:broetchenservice/readExample.dart';
 import 'package:broetchenservice/writeExample.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import './appbar.dart' as ab;
 
@@ -17,7 +16,8 @@ class _RTDatabaseState extends State<RTDatabase> {
     return Scaffold(
       appBar: ab.Appbar.MainAppBar(context),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text("Hier kannst du dich mit der Realtime Database auseinandersetzen"),
+        const Text(
+            "Hier kannst du dich mit der Realtime Database auseinandersetzen"),
         SizedBox(
           height: 16,
           width: MediaQuery.of(context).size.width,
@@ -25,15 +25,17 @@ class _RTDatabaseState extends State<RTDatabase> {
         ElevatedButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReadExample()));
+                  MaterialPageRoute(builder: (context) => const ReadExample()));
             },
-            child: Text("Lese Beispiel")),
+            child: const Text("Lese Beispiel")),
         ElevatedButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WriteExample()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const WriteExample()));
             },
-            child: Text("Schreibe Beispiel"))
+            child: const Text("Schreibe Beispiel"))
       ]),
     );
   }

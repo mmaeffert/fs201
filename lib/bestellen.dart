@@ -31,7 +31,7 @@ class _BestellenState extends State<Bestellen> {
   @override
   void initState() {
     // test();
-    orderlist.add(TableRow(children: [
+    orderlist.add(const TableRow(children: [
       Center(child: Text("Produkt")),
       Center(child: Text("Preis")),
       Center(child: Text("Menge"))
@@ -44,7 +44,7 @@ class _BestellenState extends State<Bestellen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      margin: EdgeInsets.only(top: 50),
+      margin: const EdgeInsets.only(top: 50),
       child: Column(
         children: [
           Table(

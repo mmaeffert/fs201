@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'package:flutter/services.dart';
 import 'package:broetchenservice/db/readFromDB.dart';
 import 'package:broetchenservice/db/writeToDB.dart';
@@ -7,7 +6,6 @@ import 'package:broetchenservice/order/singleOrder.dart';
 import 'package:broetchenservice/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:broetchenservice/UI%20Kit/alertDialogKit.dart';
-import 'dart:io';
 import './appbar.dart' as ab;
 
 class OrderList extends StatefulWidget {
@@ -20,10 +18,10 @@ class OrderList extends StatefulWidget {
 
 class _OrderListState extends State<OrderList> {
   Map<String, Icon> statusIcon = {
-    'o': Icon(Icons.timelapse_outlined, color: Colors.orangeAccent),
-    'p': Icon(Icons.check_outlined, color: Colors.green),
-    'r': Icon(Icons.attach_money_outlined, color: Colors.green),
-    'c': Icon(Icons.cancel_outlined, color: Colors.redAccent)
+    'o': const Icon(Icons.timelapse_outlined, color: Colors.orangeAccent),
+    'p': const Icon(Icons.check_outlined, color: Colors.green),
+    'r': const Icon(Icons.attach_money_outlined, color: Colors.green),
+    'c': const Icon(Icons.cancel_outlined, color: Colors.redAccent)
   };
 
   List<ExpansionTile> tileList = [];
@@ -51,25 +49,25 @@ class _OrderListState extends State<OrderList> {
           body: TabBarView(children: [
             //Orderslist
             Padding(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 child: Container(
                     width: (MediaQuery.of(context).size.width > 800)
                         ? 800
                         : MediaQuery.of(context).size.width,
                     child: isloading
-                        ? Text("loading...")
+                        ? const Text("loading...")
                         : Card(
                             color: currentTheme.getPrimaryColor(),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                side: BorderSide(color: Colors.black)),
+                                side: const BorderSide(color: Colors.black)),
                             child: SingleChildScrollView(
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 child: Column(children: tileList))))),
 
             //Standing orders list
             Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Card(
                 color: currentTheme.getPrimaryColor(),
                 child: Column(children: standingOrderList),
@@ -112,7 +110,7 @@ class _OrderListState extends State<OrderList> {
               "Ok");
           setState(() {});
         }),
-        icon: Icon(Icons.cancel_outlined)));
+        icon: const Icon(Icons.cancel_outlined)));
 
     return returnList;
   }
@@ -123,15 +121,13 @@ class _OrderListState extends State<OrderList> {
       return wo2.timeStamp - wo1.timeStamp;
     });
 
-    print('WHOLEORDERLIST: ' + wholeOrderList.toString());
-
     for (WholeOrder wo in wholeOrderList) {
       tileList.add(
         ExpansionTile(
           initiallyExpanded:
               widget.openTiles.contains(wo.orderID) ? true : false,
-          textColor: Color.fromARGB(255, 52, 69, 77),
-          childrenPadding: EdgeInsets.only(left: 15),
+          textColor: const Color.fromARGB(255, 52, 69, 77),
+          childrenPadding: const EdgeInsets.only(left: 15),
           expandedAlignment: Alignment.topLeft,
           title: Row(
             children: [
@@ -146,12 +142,11 @@ class _OrderListState extends State<OrderList> {
                 Text(
                   wo.standingOrder ? "Aus Dauerauftrag" : "Aus Bestellung",
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
                 (wo.status == 'o')
                     ? IconButton(
                         onPressed: (() {
-                          print('WO STATUS: ' + wo.status.toString());
                           writeToDB().cancelOrder(wo);
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
@@ -162,20 +157,20 @@ class _OrderListState extends State<OrderList> {
                             wo.status = 'c';
                           });
                         }),
-                        icon: Icon(Icons.cancel),
+                        icon: const Icon(Icons.cancel),
                       )
-                    : SizedBox.shrink()
+                    : const SizedBox.shrink()
               ],
             ),
             Row(
               children: [
                 Text(
                   "Bestellnummer: " + wo.orderID!,
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
                 IconButton(
                     onPressed: () => {copyToClipboard(wo.orderID!)},
-                    icon: Icon(Icons.copy))
+                    icon: const Icon(Icons.copy))
               ],
             ),
             generateOrderList(wo.orderList)
@@ -197,25 +192,25 @@ class _OrderListState extends State<OrderList> {
 
   //Creates the table that is displayed, when you expand the tile
   generateOrderList(List<SingleOrder> singleOrderList) {
-    DataTable result = DataTable(columns: [
+    DataTable result = DataTable(columns: const [
       DataColumn(label: Text("Artikel")),
       DataColumn(label: Text("Anzahl")),
       DataColumn(label: Text("Preis"))
-    ], rows: []);
+    ], rows: const []);
 
     for (SingleOrder so in singleOrderList) {
       result.rows.add(DataRow(cells: [
         DataCell(Text(
           so.identifier,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         )),
         DataCell(Text(
           so.amount.toString(),
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         )),
         DataCell(Text(
           so.price.toString(),
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ))
       ]));
     }

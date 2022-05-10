@@ -2,7 +2,6 @@ import 'package:broetchenservice/balance.dart';
 import 'package:flutter/material.dart';
 import './appbar.dart' as ab;
 import './db/readFromDB.dart';
-import './orderList.dart';
 import './themes.dart';
 
 class BalancePage extends StatefulWidget {
@@ -32,9 +31,9 @@ class _BalancePageState extends State<BalancePage> {
     return Scaffold(
         appBar: ab.Appbar.MainAppBar(context),
         body: isloading
-            ? Text("loading...")
+            ? const Text("loading...")
             : SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(children: tableRows)));
   }
 
@@ -43,7 +42,7 @@ class _BalancePageState extends State<BalancePage> {
 
     for (Balance ba in balanceList) {
       tableRows.add(ExpansionTile(
-        childrenPadding: EdgeInsets.only(left: 15),
+        childrenPadding: const EdgeInsets.only(left: 15),
         expandedAlignment: Alignment.topLeft,
         title: Row(
           children: [
@@ -57,11 +56,13 @@ class _BalancePageState extends State<BalancePage> {
             ba.comment != null
                 ? Text(ba.comment.toString(),
                     style: TextStyle(color: CustomTheme().getTextColor()))
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ],
         ),
         children: [
-          ba.orderID != null ? Text(ba.orderID.toString()) : SizedBox.shrink(),
+          ba.orderID != null
+              ? Text(ba.orderID.toString())
+              : const SizedBox.shrink(),
         ],
       ));
     }
