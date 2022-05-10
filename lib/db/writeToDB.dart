@@ -75,7 +75,7 @@ class writeToDB {
     //writes into "open_orders" table
     database
         .child('/open_orders/')
-        .update({user!.uid: query})
+        .update({user!.uid: orderID})
         .then((value) => print("Erfolgreich geschrieben"))
         .catchError((onError) => print(onError));
 
@@ -83,7 +83,7 @@ class writeToDB {
     if (order.standingOrder) {
       database
           .child('/standingorders/')
-          .set({user!.uid: query})
+          .set({user!.uid: order.orderID})
           .then((value) => print("Erfolgreich geschrieben"))
           .catchError((onError) => print(onError));
     }
@@ -110,6 +110,7 @@ class writeToDB {
 
   //Cancels an order
   cancelOrder(WholeOrder wo) async {
+    //Checks if order is already cancelled
     if (await ReadFromDB().getOrderStatus(wo.orderID!) == 'c') {
       return;
     }
@@ -140,7 +141,11 @@ class writeToDB {
 
     await ReadFromDB().userAlreadyExists().then((value) {
       if (!value) {
-        query.addAll({'role': 'customer', 'balance': 0.0});
+        query.addAll({
+          'role': 'customer',
+          'balance': 0.0,
+          'class': 'N/A',
+        });
       }
     });
 

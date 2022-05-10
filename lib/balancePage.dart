@@ -52,7 +52,7 @@ class _BalancePageState extends State<BalancePage> {
               style:
                   TextStyle(color: ba.balance >= 0 ? Colors.green : Colors.red),
             ),
-            Text(" - " + getDate(ba.timestamp) + " - ",
+            Text(" € - " + getDate(ba.timestamp) + " - ",
                 style: TextStyle(color: CustomTheme().getTextColor())),
             ba.comment != null
                 ? Text(ba.comment.toString(),

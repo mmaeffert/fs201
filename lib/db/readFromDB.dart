@@ -92,7 +92,7 @@ class ReadFromDB with ChangeNotifier {
           int.parse(key),
           double.parse(balanceMap[key]['balance'].toString()),
           balanceMap[key]['comment'],
-          balanceMap[key]['orderID']));
+          balanceMap[key]['orderID'].toString()));
     }
 
     return balanceList;
@@ -100,6 +100,8 @@ class ReadFromDB with ChangeNotifier {
 
   Future<WholeOrder> getOpenOrder() async {
     DataSnapshot ds = await database.child('/open_orders/' + user!.uid).get();
+    print('ds VALUE: from ' + user!.uid + ' is ' + ds.value.toString());
+    ds = await database.child('/orders/' + ds.value.toString()).get();
 
     var openOrder =
         LinkedHashMap.from(ds.value as LinkedHashMap<Object?, Object?>);

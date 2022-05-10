@@ -1,0 +1,30 @@
+"filename", "language", "Dart", "comment", "blank", "total"
+"c:\react\flatter\fs20_2\broetchenservice\lib\UI Kit\alertDialogKit.dart", "Dart", 21, 7, 7, 35
+"c:\react\flatter\fs20_2\broetchenservice\lib\UI Kit\checkBoxKit.dart", "Dart", 28, 0, 4, 32
+"c:\react\flatter\fs20_2\broetchenservice\lib\UI Kit\dividerKit.dart", "Dart", 11, 0, 5, 16
+"c:\react\flatter\fs20_2\broetchenservice\lib\UI Kit\headerKit.dart", "Dart", 21, 0, 4, 25
+"c:\react\flatter\fs20_2\broetchenservice\lib\UI Kit\textKit.dart", "Dart", 7, 0, 2, 9
+"c:\react\flatter\fs20_2\broetchenservice\lib\account.dart", "Dart", 128, 2, 9, 139
+"c:\react\flatter\fs20_2\broetchenservice\lib\appbar.dart", "Dart", 54, 0, 5, 59
+"c:\react\flatter\fs20_2\broetchenservice\lib\balance.dart", "Dart", 7, 0, 2, 9
+"c:\react\flatter\fs20_2\broetchenservice\lib\balanceChange.dart", "Dart", 0, 0, 1, 1
+"c:\react\flatter\fs20_2\broetchenservice\lib\balancePage.dart", "Dart", 77, 0, 9, 86
+"c:\react\flatter\fs20_2\broetchenservice\lib\bestellen.dart", "Dart", 50, 1, 7, 58
+"c:\react\flatter\fs20_2\broetchenservice\lib\dauerauftrag.dart", "Dart", 17, 0, 4, 21
+"c:\react\flatter\fs20_2\broetchenservice\lib\db\readFromDB.dart", "Dart", 177, 7, 52, 236
+"c:\react\flatter\fs20_2\broetchenservice\lib\db\writeToDB.dart", "Dart", 141, 20, 31, 192
+"c:\react\flatter\fs20_2\broetchenservice\lib\drawer.dart", "Dart", 124, 0, 2, 126
+"c:\react\flatter\fs20_2\broetchenservice\lib\feedback.dart", "Dart", 51, 0, 5, 56
+"c:\react\flatter\fs20_2\broetchenservice\lib\googleSignInProvider.dart", "Dart", 23, 0, 7, 30
+"c:\react\flatter\fs20_2\broetchenservice\lib\main.dart", "Dart", 74, 9, 13, 96
+"c:\react\flatter\fs20_2\broetchenservice\lib\orderList.dart", "Dart", 209, 3, 24, 236
+"c:\react\flatter\fs20_2\broetchenservice\lib\order\UI\order.dart", "Dart", 332, 9, 25, 366
+"c:\react\flatter\fs20_2\broetchenservice\lib\order\product.dart", "Dart", 70, 7, 5, 82
+"c:\react\flatter\fs20_2\broetchenservice\lib\order\singleOrder.dart", "Dart", 56, 7, 6, 69
+"c:\react\flatter\fs20_2\broetchenservice\lib\order\wholeOrder.dart", "Dart", 61, 8, 11, 80
+"c:\react\flatter\fs20_2\broetchenservice\lib\quantitySelector.dart", "Dart", 57, 0, 8, 65
+"c:\react\flatter\fs20_2\broetchenservice\lib\readExample.dart", "Dart", 27, 0, 4, 31
+"c:\react\flatter\fs20_2\broetchenservice\lib\realTimeDatabaseExample.dart", "Dart", 37, 0, 4, 41
+"c:\react\flatter\fs20_2\broetchenservice\lib\themes.dart", "Dart", 42, 0, 10, 52
+"c:\react\flatter\fs20_2\broetchenservice\lib\writeExample.dart", "Dart", 54, 3, 9, 66
+"Total", "-", 1956, 83, 275, 2314

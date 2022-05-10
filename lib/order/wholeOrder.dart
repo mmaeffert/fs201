@@ -40,7 +40,7 @@ class WholeOrder {
   }
 
   WholeOrder(List<SingleOrder> orderList, bool standingOrder, String status,
-      [String? orderID]) {
+      [String? orderID, int? timestamp]) {
     this.orderID = orderID;
     this.status = status;
     this.standingOrder = standingOrder;
@@ -48,7 +48,11 @@ class WholeOrder {
     final user = FirebaseAuth.instance.currentUser;
     userID = user!.uid;
 
-    timeStamp = DateTime.now().millisecondsSinceEpoch;
+    if (timestamp != null) {
+      this.timeStamp = timestamp;
+    } else {
+      timeStamp = DateTime.now().millisecondsSinceEpoch;
+    }
 
     //Setting wholeOrderValue
     this.orderList = orderList;
