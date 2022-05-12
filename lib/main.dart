@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './themes.dart';
 import './drawer.dart';
+import './homePage.dart';
 import './appbar.dart' as ab;
 import './bestellen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -66,7 +67,7 @@ MaterialApp(
     return ChangeNotifierProvider(
       create: (context) => GoogleSignInProvider(),
       child: MaterialApp(
-        home: MyHome(),
+        home: HomePage(),
         theme: CustomTheme.lightTheme,
         darkTheme: CustomTheme.darkTheme,
         themeMode: currentTheme.currentTheme,

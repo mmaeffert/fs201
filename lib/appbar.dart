@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import './themes.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class GetCurrentUser {
   var user = FirebaseAuth.instance.currentUser;
@@ -23,7 +25,10 @@ class Appbar {
     );
   }
 
+
+
   static TabAppBar(BuildContext context) {
+
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       title: Text("🍞 Brötchenservice"),
@@ -45,14 +50,19 @@ class Appbar {
   }
 
   static showUserProfile() {
+    Color whiteColor = Color.fromRGBO(242, 242, 242, 1);
     if (GetCurrentUser().getUser() == null) {
       return SizedBox.shrink();
     } else {
       return CircleAvatar(
-        radius: 21,
+          radius: 19,
+          backgroundColor: whiteColor,
+    child: CircleAvatar(
+
+        radius: 17,
         backgroundImage:
             NetworkImage(GetCurrentUser().getUser()!.photoURL.toString()),
-      );
+      ));
     }
   }
 }
